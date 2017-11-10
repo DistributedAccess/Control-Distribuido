@@ -15,8 +15,6 @@ def Ip_Host():
 
 
 
-
-
 cnx = connection.MySQLConnection(user = 'root', password = '2010020726Ev',
                                  host = '127.0.0.1',
                                  database = 'TablaRuteo')
