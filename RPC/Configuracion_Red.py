@@ -1,12 +1,21 @@
-import mysql.connector
 from mysql.connector import errorcode
-import commands                                 #   Para el uso de comandos Linux
+import mysql.connector
+import commands                         #   Para el uso de comandos Linux
 
 class Configuracion_Red:
 
     #   Variables privadas
     _User        =   'root'
     _Password    =   '2010020726Ev'
+
+    #   Variables publicas
+    cnx         =   ''          #   Objeto para la Base de Datos
+    Ip          =   ''          #   Direccion Ip
+    Id          =   ''          #   Numero de Id
+    Grupo       =   ''          #   Grupo del Host
+    Tipo_Host   =   ''          #   Tipo de Host, Cliete o Servidor
+    Coordinador =   ''          #   Bandera del Coordinador
+    Busy        =   ''          #   Bnadera del estado
 
     def __init__(self, user, password):
         #   Esta funcion puede ser considerada como un
@@ -24,7 +33,7 @@ class Configuracion_Red:
         #   Se conecta a la base de datos, si hay algun
         #   error en la conexion este te avisara.
         try:
-            cnx = mysql.connector.connect(user = user, password = password,
+            self.cnx = mysql.connector.connect(user = user, password = password,
                                           host = '127.0.0.1',
                                           database = 'TablaRuteo')
             print("Conexion establecida a la Base de Datos")
@@ -36,15 +45,18 @@ class Configuracion_Red:
             else:
                 print(err)
         else:
-            cnx.close()
+            self.cnx.close()
 
-    def Conec_DB():
-        #   Esta funcion conectara el objeto a la Base
-        #   de datos, por primera vez o cada que halla
-        #   una desconexion hacia ella.
+    def Conec_DB(self):
+        #   Esta funcion conectara el objeto a la Base de datos
+        #   por primera vez si no se han modificado las variables
+        #   _User y _Password o cada que halla una desconexion
+        #   hacia ella. Si el las variables _User y _Password
+        #   fueron modficadas es necesario llamar a la funcion
+        #   __init__(self, user, password)
 
         try:
-            cnx = mysql.connector.connect(user = _User, password = _Password,
+            self.cnx = mysql.connector.connect(user = self._User, password = self._Password,
                                           host = '127.0.0.1',
                                           database = 'TablaRuteo')
             print("Conexion establecida a la Base de Datos")
@@ -56,8 +68,31 @@ class Configuracion_Red:
             else:
                 print(err)
         else:
-            cnx.close()
+            self.cnx.close()
 
+    def Disco_DB(self):
+        #   Esta funcion desconectara el objeto de la
+        #   Base de datos.
+        self.cnx.close()
+        print("Desconexion de la Base de Datos")
+
+    def Agregar(self):
+
+        cursor = self.cnx.cursor()
+        Agregar_Host = ("INSERT INTO Ruteo (Grupo, IP)"
+                        "VALUES(%s, %s)")
+
+        A = 'Grupo A'
+        Ip = Ip_Host()
+
+        Host_me = (A, Ip)
+
+        cursor.execute(Agregar_Host, Host_me)
+
+        print("Se ha agregado una direccion")
+
+        self.cnx.commit()
+        cursor.close()
 
     def Ip_Host():
         #   Esta funcion regresa la direccion ip del Host
