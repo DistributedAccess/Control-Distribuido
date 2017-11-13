@@ -80,7 +80,7 @@ class Configuracion_Red:
         self.cursor.close()
         print("Desconexion de la Base de Datos")
 
-    def Agregar(self):
+    def Agregar_Propio(self):
         #   Esta funcion agrega a la Base de Datos la direccion
         #   Ip del Host, asegurandose que la direccion sea unica
         #   en la tabla de ruteo
@@ -114,7 +114,7 @@ class Configuracion_Red:
         self.cnx.commit()
         self.cursor.close()
 
-    def Eliminar(self):
+    def Eliminar_Propio(self):
         #   Esta funcion elimina de la Base de Datos la direccion
         #   Ip del Host
 
@@ -137,6 +137,89 @@ class Configuracion_Red:
 
         self.cnx.commit()
         self.cursor.close()
+
+    def Agregar_Host(self, Ip, Grupo):
+        #   Esta funcion agrega a la Base de Datos direcciones Ip,
+        #   externas al host, asegurandose que la direccion sea unica
+        #   en la tabla de ruteo
+
+        #   Es necesario volver a conectarse con la base de datos
+        #   para poder ingresar datos en las tablas
+        self.cnx = mysql.connector.connect(user = self.__User, password = self.__Password,
+                                      host = '127.0.0.1',
+                                      database = 'TablaRuteo')
+        print("Conexion establecida a la Base de Datos")
+
+        #   Se crea un objeto que que utilice el metodo cursor()
+        #   de mysql para poder ingresar, consultar, eliminar etc. datos
+        self.cursor = self.cnx.cursor()
+
+        Host_me = (Grupo, Ip)
+
+        Agregar_Host = ("INSERT INTO Ruteo (Grupo, IP)"
+                        "VALUES(%s, %s)")
+
+        Eliminar_Host =  ("DELETE FROM Ruteo WHERE IP = '%s'" % Ip)
+
+        self.cursor.execute(Eliminar_Host)
+        print("Se ha eliminado una direccion")
+
+        self.cursor.execute(Agregar_Host, Host_me)
+        print("Se ha agregado una direccion")
+
+        self.cnx.commit()
+        self.cursor.close()
+
+    def Eliminar_Host(self, Ip):
+        #   Esta funcion elimina de la Base de Datos direcciones Ip,
+        #   externas al host
+
+        #   Es necesario volver a conectarse con la base de datos
+        #   para poder ingresar datos en las tablas
+        self.cnx = mysql.connector.connect(user = self.__User, password = self.__Password,
+                                      host = '127.0.0.1',
+                                      database = 'TablaRuteo')
+        print("Conexion establecida a la Base de Datos")
+
+        #   Se crea un objeto que que utilice el metodo cursor()
+        #   de mysql para poder ingresar, consultar, eliminar etc. datos
+        self.cursor = self.cnx.cursor()
+
+        Eliminar_Host =  ("DELETE FROM Ruteo WHERE IP = '%s'" % Ip)
+
+        self.cursor.execute(Eliminar_Host)
+        print("Se ha eliminado una direccion")
+
+
+
+        self.cnx.commit()
+        self.cursor.close()
+
+    def Consultar(self):
+        #   Esta funcion consulta a la Base de Datos la tabla
+        #   de ruteo
+
+        #   Es necesario volver a conectarse con la base de datos
+        #   para poder ingresar datos en las tablas
+        self.cnx = mysql.connector.connect(user = self.__User, password = self.__Password,
+                                      host = '127.0.0.1',
+                                      database = 'TablaRuteo')
+        print("Conexion establecida a la Base de Datos")
+
+        #   Se crea un objeto que que utilice el metodo cursor()
+        #   de mysql para poder ingresar, consultar, eliminar etc. datos
+        self.cursor = self.cnx.cursor()
+
+        Query = ("SELECT * FROM Ruteo")
+
+        self.cursor.execute(Query)
+
+        for(ID, Grupo, IP) in self.cursor:
+            print(ID, Grupo, IP)
+
+        self.cursor.close()
+        self.cnx.close()
+
 
     def Ip_Host(self):
         #   Esta funcion regresa la direccion ip del Host
