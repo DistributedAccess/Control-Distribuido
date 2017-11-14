@@ -3,6 +3,10 @@ import mysql.connector
 
 
 class Create_DB:
+    #   Esta clase se dedica a crear la base de datos
+    #   y las tablas a usar en los servidores y en los
+    #   procesos. Esta clase se ejecutara una sola vez
+    #   solo en la instalacion de nuevos nodos.
 
     #   Variables privadas
     __User        =   'root'

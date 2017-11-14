@@ -3,6 +3,9 @@ import mysql.connector
 import commands                         #   Para el uso de comandos Linux
 
 class Configuracion_Red:
+    #   Esta clase se dedica exclusivamente en la
+    #   configuracion de la red, en agregar direcciones
+    #   ip tanto del host propio como hosts externos
 
     #   Variables privadas
     __User        =   'root'
@@ -219,7 +222,6 @@ class Configuracion_Red:
 
         self.cursor.close()
         self.cnx.close()
-
 
     def Ip_Host(self):
         #   Esta funcion regresa la direccion ip del Host
