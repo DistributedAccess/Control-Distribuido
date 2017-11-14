@@ -3,50 +3,36 @@ import mysql.connector
 
 
 class Create_DB:
-    #   Esta clase se dedica a crear la base de datos y las tablas
-    #   a usar en los servidores y en los procesos. Esta clase se
-    #   ejecutara una sola vez solo en la instalacion de nuevos nodos.
-    #
-    #   La Base de Datos a crear tiene las siguientes caracteristicas:
-    #
-    #   Base de Datos:  CONTROL_DISTRIBUIDO
-    #   Tabla:          TABLA_RUTEO
-    #
-    #   +------------+------------------+------+-----+---------+----------------+
-    #   | Field      | Type             | Null | Key | Default | Extra          |
-    #   +------------+------------------+------+-----+---------+----------------+
-    #   | ID         | int(10) unsigned | NO   | PRI | NULL    | auto_increment |
-    #   | Process_ID | int(10)          | NO   |     | NULL    |                |
-    #   | IP         | varchar(16)      | NO   |     | NULL    |                |
-    #   | Grupo      | varchar(10)      | NO   |     | NULL    |                |
-    #   | Coordinador| varchar(10)      | NO   |     | NULL    |                |
-    #   | Bussy      | varchar(10)      | NO   |     | NULL    |                |
-    #   +------------+------------------+------+-----+---------+----------------+
-    #
-    #   ID: Identificador de la llave primaria
-    #   Process_ID: Identificador del proceso Cliete o Servidor
-    #   IP: Direccion Ip del proceso Cliente o Servidor
-    #   Grupo: Clasifica a las direcciones Ip por Cliente o Servidor
-    #   Coordinador: Indica que Cliente y Servidor son coordinadores
-    #   Bussy: Indica el estado ocupado/desocupado del Host
-
+    #   Esta clase se dedica a crear la base de datos
+    #   y las tablas a usar en los servidores y en los
+    #   procesos. Esta clase se ejecutara una sola vez
+    #   solo en la instalacion de nuevos nodos.
 
     #   Variables privadas
     __User        =   'root'
     __Password    =   '2010020726Ev'
-    __DB_NAME     =   'CONTROL_DISTRIBUIDO'
+    __DB_NAME     =   'anina'
     #   Variables publicas
     cnx           =   None
     cursor        =   None
 
-    def __init__(self):
+    def __init__(self, user, password):
         #   Esta funcion puede ser considerada como un
         #   constructor ya que cuando se instancia una clase
         #   esta se inicializa. Este constructor se conecta a
         #   la base de datos.
+        self.U = user
+        self.P = password
 
+        #   Se actualizan las variables privadas para
+        #   el inicio de sesion de la Base de Datos
+        self.__User = user
+        self.__Password = password
+
+        #   Se conecta a la base de datos, si hay algun
+        #   error en la conexion este te avisara.
         try:
-            self.cnx = mysql.connector.connect(user = self.__User, password = self.__Password)
+            self.cnx = mysql.connector.connect(user = user, password = password)
 
             print("Conexion establecida a la Base de Datos")
         except mysql.connector.Error as err:

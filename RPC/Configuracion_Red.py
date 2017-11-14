@@ -1,64 +1,54 @@
 from mysql.connector import errorcode
 import mysql.connector
-import commands                         #   Para el uso de comandos Linux
+from Create_DB import *
+import commands
 
 class Configuracion_Red:
-    #   Esta clase se dedica exclusivamente en la
-    #   configuracion de la red, en agregar direcciones
-    #   ip tanto del host propio como hosts externos
+    #   Esta clase se dedica exclusivamente en la configuracion
+    #   de los Hosts en la red de Control_Distribuido. Los Hosts
+    #   ya sean Cliete o Servidor pueden hacer uso de los metodos
+    #   de esta clase, las reglas de su respectivo uso estan
+    #   determinadas por el tipo de objeto al que correspondan.
+    #
+    #   La configuracion que realiza esta clase esta relacionada
+    #   con la tabla de ruteo de los Hosts asi como el acceso a
+    #   la Base de Datos.
+    #
+    #   Cabe aclarar que la clase debera acceder a una Base de
+    #   Datos con las siguientes caracteristicas:
+    #
+    #   Base de Datos:  CONTROL_DISTRIBUIDO
+    #   Tabla:          TABLA_RUTEO
+    #
+    #   Si no se cuenta con tal Base de Datos se debera ejecutar
+    #   el programa Create_DB.py una vez, para hacer dichas
+    #   configuraciones, la creacion de la base de datos puede ser
+    #   manual o puede hacerse desde el constructor __init__.
 
     #   Variables privadas
-    __User        =   'root'
-    __Password    =   '2010020726Ev'
+    __User        =   'root'            #   Usuario de la Base de Datos
+    __Password    =   '2010020726Ev'    #   Contrasena de la Base de Datos
 
     #   Variables publicas
     cnx         =   None          #   Objeto para la Base de Datos
-    cursor      =   None          #   Cursor para la insertar datos
+    cursor      =   None          #   Objeto para la Base de Datos
     Ip          =   None          #   Direccion Ip
     Id          =   None          #   Numero de Id
     Grupo       =   None          #   Grupo del Host
     Tipo_Host   =   None          #   Tipo de Host, Cliete o Servidor
     Coordinador =   None          #   Bandera del Coordinador
-    Busy        =   None          #   Bnadera del estado
+    Busy        =   None          #   Bandera de Estado Ocupado/Desocupado
 
-    def __init__(self, user, password):
-        #   Esta funcion puede ser considerada como un
-        #   constructor ya que cuando se instancia una clase
-        #   esta se inicializa. Este constructor se conecta a
-        #   la base de datos.
-        self.U = user
-        self.P = password
 
-        #   Se actualizan las variables privadas para
-        #   el inicio de sesion de la Base de Datos
-        self.__User = user
-        self.__Password = password
-
-        #   Se conecta a la base de datos, si hay algun
-        #   error en la conexion este te avisara.
-        try:
-            self.cnx = mysql.connector.connect(user = user, password = password,
-                                          host = '127.0.0.1',
-                                          database = 'TablaRuteo')
-
-            print("Conexion establecida a la Base de Datos")
-        except mysql.connector.Error as err:
-            if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-                print("Hay un error de escritura en el Usuario y la Contrasena")
-            elif err.errno == errorcode.ER_BAD_DB_ERROR:
-                print("No existe la Base de Datos")
-            else:
-                print(err)
-        else:
-            self.cnx.close()
-
-    def Conec_DB(self):
-        #   Esta funcion conectara el objeto a la Base de Datos
-        #   por primera vez si no se han modificado las variables
-        #   _User y _Password o cada que halla una desconexion
-        #   hacia ella. Si el las variables _User y _Password
-        #   fueron modficadas es necesario llamar a la funcion
-        #   __init__(self, user, password)
+    def __init__(self):
+        #   Constructor de la clase, que  establece la conexion a
+        #   la Base de Datos, en caso de no conectarse se llamara
+        #   automaticamente al metodo Conec_DB(self, user, password)
+        #   que le pedira al usuario ingresar manualmente el Usuario
+        #   y Contrasena para tener acceso a la Base de Datos. En
+        #   caso de no existir la Base de Datos se ejecutara el programa
+        #   Create_DB.py para crear la Base de Datos.
+        #
 
         try:
             self.cnx = mysql.connector.connect(user = self.__User, password = self.__Password,
@@ -75,6 +65,25 @@ class Configuracion_Red:
                 print(err)
         else:
             self.cnx.close()
+
+    def Conec_DB(self, user, password):
+        #   Esta funcion establece la conexion entre el objeto a
+        #   la Base de Datos de modo que el usuario debera ingresar
+        #   el Usuario y la Contrasena para poder tener acceso a
+        #   la Base de Datos.
+
+        self.U = user
+        self.P = password
+
+        #   Se actualizan las variables privadas para
+        #   el inicio de sesion de la Base de Datos
+        self.__User = user
+        self.__Password = password
+
+        self.cnx = mysql.connector.connect(user = user, password = password,
+                                      host = '127.0.0.1',
+                                      database = 'TablaRuteo')
+
 
     def Disco_DB(self):
         #   Esta funcion desconectara el objeto de la
