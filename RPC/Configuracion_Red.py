@@ -202,6 +202,11 @@ class Configuracion_Red:
         self.cnx.commit()
         self.cursor.close()
 
+        #   La funcion ID_Proceso debera ejecutarse despues
+        #   de self.cnx.commit() y self.cursor.close() para
+        #   evitar inconsistencias
+        self.ID_Proceso(Ip, Grupo)
+
     def Eliminar_Host(self, Ip):
         #   Esta funcion elimina de la Base de Datos direcciones Ip,
         #   externas al host
@@ -248,18 +253,65 @@ class Configuracion_Red:
             print(ID, Process_ID, IP, Grupo, Coordinador, Busy)
 
         self.cursor.close()
-        self.cnx.close()
 
-
-    def ID_Proceso(self Ip, Grupo):
+    def ID_Proceso(self, Ip, Grupo):
         #   Esta funcion se encarga de asignar el Process_ID
         #   a los Hosts de la red.
 
-        if(Grupo == "Servidor")
-            print("Metiste un servidor")
-        else if(Grupo == "Cliente")
-            print("Metiste un Cliente")
+        #   Es necesario volver a conectarse con la base de datos
+        #   para poder ingresar datos en las tablas
+        self.cnx = mysql.connector.connect(user = self.__User, password = self.__Password,
+                                      host = '127.0.0.1',
+                                      database = 'CONTROL_DISTRIBUIDO')
+        print("Conexion establecida a la Base de Datos")
 
+        #   Se crea un objeto que que utilice el metodo cursor()
+        #   de mysql para poder ingresar, consultar, eliminar etc. datos
+        self.cursor = self.cnx.cursor()
+
+        if(Grupo == "Servidor"):
+
+            Query =  ("""SELECT Process_ID FROM TABLA_RUTEO
+                      WHERE Grupo='Servidor' AND
+                      Process_ID=(SELECT MAX(Process_ID)
+                      FROM TABLA_RUTEO)""")
+            self.cursor.execute(Query)
+
+            #   Pequena rutina para obener el Process_ID
+            #   anterior :)
+            for(Process_ID) in self.cursor:
+                ANT = Process_ID
+            ANTERIOR = str(ANT)
+            Coma = ANTERIOR.find(",")
+            ANTERIOR = ANTERIOR[1:Coma]
+            A = int(ANTERIOR)
+            A = A + 1     #   Se incrementa Anterior
+            print(A)
+
+            print("Metiste un servidor")
+            #print(Ip)
+
+        elif(Grupo == "Cliente"):
+
+            Query = ("""SELECT Process_ID FROM TABLA_RUTEO
+                     WHERE Grupo='Cliente' AND
+                     Process_ID=(SELECT MAX(Process_ID)
+                     FROM TABLA_RUTEO)""")
+            self.cursor.execute(Query)
+
+            #   Pequena rutina para obener el Process_ID
+            #   anterior :)
+            for(Process_ID) in self.cursor:
+                ANT = Process_ID
+            ANTERIOR = str(ANT)
+            Coma = ANTERIOR.find(",")
+            ANTERIOR = ANTERIOR[1:Coma]
+
+            #self.cursor.execute(Query)
+            print("Metiste un Cliente")
+            #print(Ip)
+
+        self.cursor.close()
 
     def Ip_Host(self):
         #   Esta funcion regresa la direccion ip del Host
