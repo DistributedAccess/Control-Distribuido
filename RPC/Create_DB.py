@@ -3,24 +3,59 @@ import mysql.connector
 
 
 class Create_DB:
-    #   Esta clase se dedica a crear la base de datos
-    #   y las tablas a usar en los servidores y en los
-    #   procesos. Esta clase se ejecutara una sola vez
-    #   solo en la instalacion de nuevos nodos.
+    #   Esta clase se dedica a crear la base de datos y las tablas
+    #   a usar en los servidores y en los procesos. Esta clase se
+    #   ejecutara una sola vez solo en la instalacion de nuevos nodos.
+    #
+    #   La Base de Datos a crear tiene las siguientes caracteristicas:
+    #
+    #   Base de Datos:  CONTROL_DISTRIBUIDO
+    #   Tabla:          TABLA_RUTEO
+    #                   TABLA_REPLICADA
+    #
+    #   TABLA_RUTEO
+    #   +------------+------------------+------+-----+---------+----------------+
+    #   | Field      | Type             | Null | Key | Default | Extra          |
+    #   +------------+------------------+------+-----+---------+----------------+
+    #   | ID         | int(10) unsigned | NO   | PRI | NULL    | auto_increment |
+    #   | Process_ID | int(10)          | NO   |     | NULL    |                |
+    #   | IP         | varchar(16)      | NO   |     | NULL    |                |
+    #   | Grupo      | varchar(10)      | NO   |     | NULL    |                |
+    #   | Coordinador| BIT(1)           | NO   |     | NULL    |                |
+    #   | Busy       | BIT(1)           | NO   |     | NULL    |                |
+    #   +------------+------------------+------+-----+---------+----------------+
+    #
+    #   ID: Identificador de la llave primaria
+    #   Process_ID: Identificador del proceso Cliete o Servidor
+    #   IP: Direccion Ip del proceso Cliente o Servidor
+    #   Grupo: Clasifica a las direcciones Ip por Cliente o Servidor
+    #   Coordinador: Indica que Cliente y Servidor son coordinadores
+    #   Busy: Indica el estado ocupado/desocupado del Host
+    #
+    #
+    #   TABLA_REPLICADA
+    #   +------------+------------------+------+-----+---------+----------------+
+    #   | Field      | Type             | Null | Key | Default | Extra          |
+    #   +------------+------------------+------+-----+---------+----------------+
+    #
+    #
+
 
     #   Variables privadas
-    __User        =   'root'
-    __Password    =   '2010020726Ev'
-    __DB_NAME     =   'anina'
+    __User        =   None
+    __Password    =   None
+    __DB_NAME     =   'CONTROL_DISTRIBUIDO'
     #   Variables publicas
     cnx           =   None
     cursor        =   None
 
     def __init__(self, user, password):
-        #   Esta funcion puede ser considerada como un
-        #   constructor ya que cuando se instancia una clase
-        #   esta se inicializa. Este constructor se conecta a
-        #   la base de datos.
+        #   Constructor de la clase, que  establece la conexion a
+        #   la Base de Datos. Este constructor debe recibir el
+        #   usuario y la contrasena del metodo o usuario que
+        #   la este utilizando, debido a que el metodo que utilice
+        #   esta clase ya cuenta con el usuario y la contrasena.
+
         self.U = user
         self.P = password
 
@@ -29,48 +64,44 @@ class Create_DB:
         self.__User = user
         self.__Password = password
 
-        #   Se conecta a la base de datos, si hay algun
-        #   error en la conexion este te avisara.
-        try:
-            self.cnx = mysql.connector.connect(user = user, password = password)
-
-            print("Conexion establecida a la Base de Datos")
-        except mysql.connector.Error as err:
-            if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-                print("Hay un error de escritura en el Usuario y la Contrasena")
-            elif err.errno == errorcode.ER_BAD_DB_ERROR:
-                print("No existe la Base de Datos")
-            else:
-                print(err)
-        else:
-            self.cnx.close()
+        self.cnx = mysql.connector.connect(user = user, password = password)
+        print("Conexion establecida a la Base de Datos")
 
     def Create_DataBase(self):
+        #   Este metodo crea la Base de Datos CONTROL_DISTRIBUIDO.
 
         try:
             self.cnx = mysql.connector.connect(user = self.__User, password = self.__Password)
             self.cursor = self.cnx.cursor()
 
-            SQL = "CREATE DATABASE IF NOT EXISTS anina"
+            SQL = "CREATE DATABASE IF NOT EXISTS CONTROL_DISTRIBUIDO"
             self.cursor.execute(SQL)
-            print("Base de datos creada!")
+            print("Base de Datos: CONTROL_DISTRIBUIDO creada!")
+
         except mysql.connector.Error as err:
-            print("Failed creating database: {}".format(err))
+            print("Error al Crear la Base de Datos: {}".format(err))
 
     def Create_Tables(self):
+        #   Este metodo crea las Tablas: TABLA_RUTEO y
+        #   TABLA_REPLICADA de la Base de Datos
+        #   CONTROL_DISTRIBUIDO.
 
-        try:
-            self.cnx = mysql.connector.connect(user = self.__User, password = self.__Password,
-                                               host = '127.0.0.1',
-                                               database = self.__DB_NAME)
-            self.cursor = self.cnx.cursor()
 
-            SQL = ("""CREATE TABLE IF NOT EXISTS Ruteo (
-                    ID int(10) NOT NULL auto_increment,
-                    Grupo varchar(100) NOT NULL,
-                    IP varchar(16) NOT NULL,
-                    PRIMARY KEY(ID)
-                   )ENGINE=InnoDB;""")
-            self.cursor.execute(SQL)
-        except mysql.connector.Error as err:
-            print("Failed creating database: {}".format(err))
+        self.cnx = mysql.connector.connect(user = self.__User, password = self.__Password,
+                                        host = '127.0.0.1',
+                                        database = self.__DB_NAME)
+        self.cursor = self.cnx.cursor()
+
+        #   Creacion de la tabla: TABLA_RUTEO
+        SQL = ("""CREATE TABLE IF NOT EXISTS TABLA_RUTEO (
+                ID int(10) NOT NULL auto_increment,
+                Process_ID int(10) NOT NULL,
+                IP varchar(16) NOT NULL,
+                Grupo varchar(10) NOT NULL,
+                Coordinador BIT(1) NOT NULL,
+                Busy BIT(1) NOT NULL,
+                PRIMARY KEY(ID)
+               )ENGINE=InnoDB;""")
+
+        self.cursor.execute(SQL)
+        print("Tabla: TABLA_RUTEO creada!")

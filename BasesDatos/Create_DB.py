@@ -19,8 +19,8 @@ class Create_DB:
     #   | Process_ID | int(10)          | NO   |     | NULL    |                |
     #   | IP         | varchar(16)      | NO   |     | NULL    |                |
     #   | Grupo      | varchar(10)      | NO   |     | NULL    |                |
-    #   | Coordinador| varchar(10)      | NO   |     | NULL    |                |
-    #   | Bussy      | varchar(10)      | NO   |     | NULL    |                |
+    #   | Coordinador| BIT(1)           | NO   |     | NULL    |                |
+    #   | Bussy      | BIT(1)           | NO   |     | NULL    |                |
     #   +------------+------------------+------+-----+---------+----------------+
     #
     #   ID: Identificador de la llave primaria
@@ -47,7 +47,6 @@ class Create_DB:
 
         try:
             self.cnx = mysql.connector.connect(user = self.__User, password = self.__Password)
-
             print("Conexion establecida a la Base de Datos")
         except mysql.connector.Error as err:
             if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
@@ -65,9 +64,9 @@ class Create_DB:
             self.cnx = mysql.connector.connect(user = self.__User, password = self.__Password)
             self.cursor = self.cnx.cursor()
 
-            SQL = "CREATE DATABASE IF NOT EXISTS anina"
+            SQL = "CREATE DATABASE IF NOT EXISTS CONTROL_DISTRIBUIDO"
             self.cursor.execute(SQL)
-            print("Base de datos creada!")
+            print("Base de Datos: CONTROL_DISTRIBUIDO creada!")
         except mysql.connector.Error as err:
             print("Failed creating database: {}".format(err))
 
@@ -79,12 +78,16 @@ class Create_DB:
                                                database = self.__DB_NAME)
             self.cursor = self.cnx.cursor()
 
-            SQL = ("""CREATE TABLE IF NOT EXISTS Ruteo (
+            SQL = ("""CREATE TABLE IF NOT EXISTS TABLA_RUTEO (
                     ID int(10) NOT NULL auto_increment,
-                    Grupo varchar(100) NOT NULL,
+                    Process_ID int(10) NOT NULL,
                     IP varchar(16) NOT NULL,
+                    Grupo varchar(10) NOT NULL,
+                    Coordinador BIT(1) NOT NULL,
+                    Bussy BIT(1) NOT NULL,
                     PRIMARY KEY(ID)
                    )ENGINE=InnoDB;""")
             self.cursor.execute(SQL)
+            print("Tabla: TABLA_RUTEO creada!")
         except mysql.connector.Error as err:
             print("Failed creating database: {}".format(err))
