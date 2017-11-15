@@ -7,6 +7,9 @@ import Ip_Host
 #   EXTERNO A LA BASE DE DATOS Y AGREGA EL PROCESS_ID
 #   TRABAJA JUNTO CON Cliente.py
 
+class RequestHandler(SimpleXMLRPCRequestHandler):
+    rpc_paths = ('/RPC2',)
+
 HOST = Ip_Host.Ip_Host()                    #HOST = Direccion Ip del Host
 PORT = 2018                                 #PORT = Puerto de comunicacion
 Server = SimpleXMLRPCServer(('localhost', PORT))   #Se crea el servidor RPC
@@ -21,6 +24,7 @@ def Registrar_Ip(Host_Externo, Grupo_Externo):
     #   que siempre se ejecute al principio
 
     Red.Agregar_Host(Host_Externo,Grupo_Externo)
+    Red.ID_Proceso(Host_Externo,Grupo_Externo)
     print("Se ha agregado el Host: ", Host_Externo)
     print("Se ha agregado al Grupo: ", Grupo_Externo)
     return "OK"

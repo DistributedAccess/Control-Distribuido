@@ -26,8 +26,8 @@ class Configuracion_Red:
     #   manual o puede hacerse desde el constructor __init__.
 
     #   Variables privadas
-    __User        =   'root'            #   Usuario de la Base de Datos
-    __Password    =   '2010020726Ev'    #   Contrasena de la Base de Datos
+    __User      =   'root'            #   Usuario de la Base de Datos
+    __Password  =   '2010020726Ev'    #   Contrasena de la Base de Datos
 
     #   Variables publicas
     cnx         =   None          #   Objeto para la Base de Datos
@@ -36,7 +36,9 @@ class Configuracion_Red:
     Ip          =   None          #   Direccion Ip
     Grupo       =   None          #   Tipo de Host Cliente o Servidor
     Coordinador =   None          #   Bandera del Coordinador
-    Busy       =   None          #   Bandera de Estado Ocupado/Desocupado
+    Busy        =   None          #   Bandera de Estado Ocupado/Desocupado
+    Server      =   0             #   Cuenta a los Servidores conectados
+    Client      =   0             #   Cuenta a los Clientes conectados
 
 
     def __init__(self):
@@ -202,11 +204,6 @@ class Configuracion_Red:
         self.cnx.commit()
         self.cursor.close()
 
-        #   La funcion ID_Proceso debera ejecutarse despues
-        #   de self.cnx.commit() y self.cursor.close() para
-        #   evitar inconsistencias
-        self.ID_Proceso(Ip, Grupo)
-
     def Eliminar_Host(self, Ip):
         #   Esta funcion elimina de la Base de Datos direcciones Ip,
         #   externas al host
@@ -256,7 +253,22 @@ class Configuracion_Red:
 
     def ID_Proceso(self, Ip, Grupo):
         #   Esta funcion se encarga de asignar el Process_ID
-        #   a los Hosts de la red.
+        #   a los Hosts de la red. Cabe aclarar que esta funcion
+        #   es llamada cada que se guarda un Host en la red
+        #   por las funciones: Agregar_Propio(self) y
+        #   Agregar_Host(self, Ip, Grupo)
+        #
+        #   La forma de incremetar el Process_ID es de lo mas
+        #   sencillo se tienen dos variables publicas Server y
+        #   Cliente que incrementan cada que se registra un host
+        #   el problema viene cuando el host se desconecta y vuelve
+        #   a comenzar las variables volveran a contar desde cero.
+        #   Puede suponer o no un problema, dependiendo el caso
+        #   para ello se deben tener protocolos de deteccion de
+        #   errores.
+        #
+        #   ESTA FUNCION DEBERA SER USADA POR EL COORDINADOR
+        #   DEL GRUPO.
 
         #   Es necesario volver a conectarse con la base de datos
         #   para poder ingresar datos en las tablas
@@ -269,49 +281,27 @@ class Configuracion_Red:
         #   de mysql para poder ingresar, consultar, eliminar etc. datos
         self.cursor = self.cnx.cursor()
 
+        A = 0
+
         if(Grupo == "Servidor"):
-
-            Query =  ("""SELECT Process_ID FROM TABLA_RUTEO
-                      WHERE Grupo='Servidor' AND
-                      Process_ID=(SELECT MAX(Process_ID)
-                      FROM TABLA_RUTEO)""")
-            self.cursor.execute(Query)
-
-            #   Pequena rutina para obener el Process_ID
-            #   anterior :)
-            for(Process_ID) in self.cursor:
-                ANT = Process_ID
-            ANTERIOR = str(ANT)
-            Coma = ANTERIOR.find(",")
-            ANTERIOR = ANTERIOR[1:Coma]
-            A = int(ANTERIOR)
-            A = A + 1     #   Se incrementa Anterior
-            print(A)
-
-            print("Metiste un servidor")
-            #print(Ip)
+            A = self.Server
+            A = A + 1
+            self.Server = A
 
         elif(Grupo == "Cliente"):
+            A = self.Client
+            A = A + 1
+            self.Client = A
 
-            Query = ("""SELECT Process_ID FROM TABLA_RUTEO
-                     WHERE Grupo='Cliente' AND
-                     Process_ID=(SELECT MAX(Process_ID)
-                     FROM TABLA_RUTEO)""")
-            self.cursor.execute(Query)
+        Update = ("""UPDATE TABLA_RUTEO SET
+                     Process_ID = '%s'
+                     WHERE IP = '%s'""" %(A,Ip))
 
-            #   Pequena rutina para obener el Process_ID
-            #   anterior :)
-            for(Process_ID) in self.cursor:
-                ANT = Process_ID
-            ANTERIOR = str(ANT)
-            Coma = ANTERIOR.find(",")
-            ANTERIOR = ANTERIOR[1:Coma]
+        self.cursor.execute(Update)
 
-            #self.cursor.execute(Query)
-            print("Metiste un Cliente")
-            #print(Ip)
-
+        self.cnx.commit()
         self.cursor.close()
+        self.cnx.close()
 
     def Ip_Host(self):
         #   Esta funcion regresa la direccion ip del Host

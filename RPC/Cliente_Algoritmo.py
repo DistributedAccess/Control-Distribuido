@@ -9,6 +9,6 @@ Server = xmlrpclib.ServerProxy("http://localhost:2018")
 
 HOST = raw_input("Direccion IP: ")
 GRUPO = raw_input("Grupo: ")
-x = Server.newip(HOST,GRUPO)
+x = Server.newip(HOST,GRUPO)    #ES IGUAL A X YA QUE X ES LA RESPUESTA
 print("listo mushashona")
 print(x)
