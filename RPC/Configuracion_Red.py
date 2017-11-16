@@ -94,6 +94,7 @@ class Configuracion_Red:
         self.cnx = mysql.connector.connect(user = user, password = password,
                                       host = '127.0.0.1',
                                       database = 'CONTROL_DISTRIBUIDO')
+        return "OK"
 
     def Disco_DB(self):
         #   Esta funcion desconectara el objeto de la
@@ -101,8 +102,9 @@ class Configuracion_Red:
         self.cnx.close()
         self.cursor.close()
         print("Desconexion de la Base de Datos")
+        return "OK"
 
-    def Agregar_Propio(self):
+    def Agregar_Propio(self, Grupo):
         #   Esta funcion agrega a la Base de Datos la direccion
         #   Ip del Host, asegurandose que la direccion sea unica
         #   en la tabla de ruteo.
@@ -120,7 +122,7 @@ class Configuracion_Red:
 
         self.Pro_Id         = 0
         self.Ip             = self.Ip_Host()
-        self.Grupo          = 'Servidor'
+        self.Grupo          = Grupo
         self.Coordinador    = 0
         self.Busy           = 0
 
@@ -140,6 +142,8 @@ class Configuracion_Red:
 
         self.cnx.commit()
         self.cursor.close()
+
+        self.ID_Proceso(self.Ip,self.Grupo)
 
     def Eliminar_Propio(self):
         #   Esta funcion elimina de la Base de Datos la direccion
@@ -204,6 +208,9 @@ class Configuracion_Red:
         self.cnx.commit()
         self.cursor.close()
 
+        self.ID_Proceso(Ip,Grupo)
+        return "OK"
+
     def Eliminar_Host(self, Ip):
         #   Esta funcion elimina de la Base de Datos direcciones Ip,
         #   externas al host
@@ -226,6 +233,7 @@ class Configuracion_Red:
 
         self.cnx.commit()
         self.cursor.close()
+        return "OK"
 
     def Consultar(self):
         #   Esta funcion consulta a la Base de Datos la tabla
@@ -246,10 +254,16 @@ class Configuracion_Red:
 
         self.cursor.execute(Query)
 
-        for(ID, Process_ID, IP, Grupo, Coordinador, Busy) in self.cursor:
+        row = self.cursor.fetchall()    #Se guarda en una matriz la consulta wooow
+                                        #Me ahorro lineas de codigo
+
+        for(ID, Process_ID, IP, Grupo, Coordinador, Busy) in row:
             print(ID, Process_ID, IP, Grupo, Coordinador, Busy)
 
+
+
         self.cursor.close()
+        return row
 
     def ID_Proceso(self, Ip, Grupo):
         #   Esta funcion se encarga de asignar el Process_ID

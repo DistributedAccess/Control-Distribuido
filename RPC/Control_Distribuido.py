@@ -1,15 +1,30 @@
-from SimpleXMLRPCServer import *
 from Configuracion_Red import *
-import Ip_Host
 
+class Control_Distribuido:
 
-HOST   = Ip_Host.Ip_Host()    #   Obtenemos la direccion Ip de nuetro Host
-PORT   = 2018
+    Red = None
+    TB  = None
 
-Server = SimpleXMLRPCServer(('localhost',PORT))
+    def __init__(self):
+        self.Red = Configuracion_Red()
+        print("Constructor CD")
 
-print ("Listening Host on: "+str('localhost')+" on Port: "+str(PORT)+"...")
+    def Replicacion(self):
+        print("Replicacion")
+        return "OK"
 
-Server.serve_forever()
+    def Eleccion(self):
+        print("Eleccion")
+        return "OK"
 
-#class Control_Distribuido:
+    def Exclusion(self):
+        print("Exclusion")
+        return "OK"
+
+    def Memoria_C(self):
+        print("Memoria_C")
+        return "OK"
+
+    def Detec_Falla(self):
+        print("Detec_Falla")
+        return "OK"
