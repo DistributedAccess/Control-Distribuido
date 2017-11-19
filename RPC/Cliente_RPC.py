@@ -4,15 +4,13 @@ from SimpleXMLRPCServer import SimpleXMLRPCServer
 import xmlrpclib
 import Ip_Host
 
-DB = Create_DB.Create_DB("root","2010020726Ev")
+DB = Create_DB("root","2010020726Ev")
 DB.Create_DataBase()
 DB.Create_Tables()
 
 HOST = Ip_Host.Ip_Host()
 
 Server = xmlrpclib.ServerProxy("http://192.168.0.8:2018")
-
-
 
 m = Server.Ingresar(HOST,'Cliente')
 print(m)

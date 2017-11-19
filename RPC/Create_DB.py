@@ -90,8 +90,8 @@ class Create_DB:
                 Process_ID int(10) NOT NULL,
                 IP varchar(16) NOT NULL,
                 Grupo varchar(10) NOT NULL,
-                Coordinador BIT(1) NOT NULL,
-                Busy BIT(1) NOT NULL
+                Coordinador TINYINT(1) NOT NULL,
+                Busy TINYINT(1) NOT NULL
                )ENGINE=InnoDB;""")
 
         self.cursor.execute(SQL)

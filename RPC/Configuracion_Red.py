@@ -253,8 +253,8 @@ class Configuracion_Red:
 
         rows = self.cursor.fetchall()    #Se guarda en una matriz la consulta wooow
                                         #Me ahorro lineas de codigo
-        for row in rows:
-            print row
+        '''for row in rows:
+            print row'''
 
         self.cursor.close()
         return rows
