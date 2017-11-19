@@ -238,29 +238,26 @@ class Configuracion_Red:
 
         #   Es necesario volver a conectarse con la base de datos
         #   para poder ingresar datos en las tablas
-        self.cnx = mysql.connector.connect(user = self.__User, password = self.__Password,
+        self.db = MySQLdb.connect(user = self.__User, passwd = self.__Password,
                                       host = '127.0.0.1',
-                                      database = 'CONTROL_DISTRIBUIDO')
+                                      db = 'CONTROL_DISTRIBUIDO')
         print("Conexion establecida a la Base de Datos")
 
         #   Se crea un objeto que que utilice el metodo cursor()
         #   de mysql para poder ingresar, consultar, eliminar etc. datos
-        self.cursor = self.cnx.cursor()
+        self.cursor = self.db.cursor()
 
         Query = ("SELECT * FROM TABLA_RUTEO")
 
         self.cursor.execute(Query)
 
-        row = self.cursor.fetchall()    #Se guarda en una matriz la consulta wooow
+        rows = self.cursor.fetchall()    #Se guarda en una matriz la consulta wooow
                                         #Me ahorro lineas de codigo
-
-        for(ID, Process_ID, IP, Grupo, Coordinador, Busy) in row:
-            print(ID, Process_ID, IP, Grupo, Coordinador, Busy)
-
-
+        for row in rows:
+            print row
 
         self.cursor.close()
-        return row
+        return rows
 
     def ID_Proceso(self, Ip, Grupo):
         #   Esta funcion se encarga de asignar el Process_ID
