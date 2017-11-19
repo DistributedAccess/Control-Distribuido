@@ -1,5 +1,5 @@
 from mysql.connector import errorcode
-import mysql.connector
+import MySQLdb
 from SimpleXMLRPCServer import SimpleXMLRPCServer
 import xmlrpclib
 
@@ -10,16 +10,16 @@ Server = xmlrpclib.ServerProxy("http://localhost:2018")
 m = Server.Ingresar('11.5.20.18','Servidor')
 print(m)
 
-cnx = mysql.connector.connect(user = 'root', password = '2010020726Ev',
+db = MySQLdb.connect(user = 'root', passwd = '2010020726Ev',
                               host = '127.0.0.1',
-                              database = 'CONTROL_DISTRIBUID')
+                              db = 'CONTROL_DISTRIBUIDO')
 print("Conexion establecida a la Base de Datos")
 
-cursor = cnx.cursor()
+cursor = db.cursor()
 
 #Host_me = (self.Pro_Id, self.Ip, self.Grupo, self.Coordinador, self.Busy)
-Agregar_Host = ("INSERT INTO TABLA_RUTEO (ID, Process_ID, Ip, Grupo, Coordinador, Busy)"
-                "VALUES(%s, %s, %s, %s, %s, %s)")
+Agregar_Host = """INSERT INTO TABLA_RUTEO (Process_ID, Ip, Grupo, Coordinador, Busy)
+                  VALUES(%s, %s, %s, %s, %s)"""
 
 Id              =   None
 Pid             =   None
@@ -40,10 +40,11 @@ for i in range(len(m)):
         Coor    = m[i][4]
         Bus     = m[i][5]
 
-        #Host_me(Id, Pid, Ip, Grup, Coor, Bus)
-    cursor.execute(Agregar_Host, (Id, Pid, Ip, Grup, Coor, Bus))
+        
+    Host_me = (Id, Pid, Ip, Grup, Coor, Bus)
+    cursor.fetchall()
+    cursor.executemany(Agregar_Host,[Host_me])
 
-    #cursor.execute(Agregar_Host, Host_me)
 
 cnx.commit()
 cursor.close()
