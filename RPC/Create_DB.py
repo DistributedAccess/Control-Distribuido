@@ -1,52 +1,49 @@
-from mysql.connector import errorcode
-import mysql.connector
-
+import MySQLdb
+#   Esta clase se dedica a crear la base de datos y las tablas
+#   a usar en los servidores y en los procesos. Esta clase se
+#   ejecutara una sola vez solo en la instalacion de nuevos nodos.
+#
+#   La Base de Datos a crear tiene las siguientes caracteristicas:
+#
+#   Base de Datos:  CONTROL_DISTRIBUIDO
+#   Tabla:          TABLA_RUTEO
+#                   TABLA_REPLICADA
+#
+#   TABLA_RUTEO
+#   +------------+------------------+------+-----+---------+----------------+
+#   | Field      | Type             | Null | Key | Default | Extra          |
+#   +------------+------------------+------+-----+---------+----------------+
+#   | ID         | int(10) unsigned | NO   | PRI | NULL    | auto_increment |
+#   | Process_ID | int(10)          | NO   |     | NULL    |                |
+#   | IP         | varchar(16)      | NO   |     | NULL    |                |
+#   | Grupo      | varchar(10)      | NO   |     | NULL    |                |
+#   | Coordinador| BIT(1)           | NO   |     | NULL    |                |
+#   | Busy       | BIT(1)           | NO   |     | NULL    |                |
+#   +------------+------------------+------+-----+---------+----------------+
+#
+#   ID: Identificador de la llave primaria
+#   Process_ID: Identificador del proceso Cliete o Servidor
+#   IP: Direccion Ip del proceso Cliente o Servidor
+#   Grupo: Clasifica a las direcciones Ip por Cliente o Servidor
+#   Coordinador: Indica que Cliente y Servidor son coordinadores
+#   Busy: Indica el estado ocupado/desocupado del Host
+#
+#
+#   TABLA_REPLICADA
+#   +------------+------------------+------+-----+---------+----------------+
+#   | Field      | Type             | Null | Key | Default | Extra          |
+#   +------------+------------------+------+-----+---------+----------------+
+#
+#
 
 class Create_DB:
-    #   Esta clase se dedica a crear la base de datos y las tablas
-    #   a usar en los servidores y en los procesos. Esta clase se
-    #   ejecutara una sola vez solo en la instalacion de nuevos nodos.
-    #
-    #   La Base de Datos a crear tiene las siguientes caracteristicas:
-    #
-    #   Base de Datos:  CONTROL_DISTRIBUIDO
-    #   Tabla:          TABLA_RUTEO
-    #                   TABLA_REPLICADA
-    #
-    #   TABLA_RUTEO
-    #   +------------+------------------+------+-----+---------+----------------+
-    #   | Field      | Type             | Null | Key | Default | Extra          |
-    #   +------------+------------------+------+-----+---------+----------------+
-    #   | ID         | int(10) unsigned | NO   | PRI | NULL    | auto_increment |
-    #   | Process_ID | int(10)          | NO   |     | NULL    |                |
-    #   | IP         | varchar(16)      | NO   |     | NULL    |                |
-    #   | Grupo      | varchar(10)      | NO   |     | NULL    |                |
-    #   | Coordinador| BIT(1)           | NO   |     | NULL    |                |
-    #   | Busy       | BIT(1)           | NO   |     | NULL    |                |
-    #   +------------+------------------+------+-----+---------+----------------+
-    #
-    #   ID: Identificador de la llave primaria
-    #   Process_ID: Identificador del proceso Cliete o Servidor
-    #   IP: Direccion Ip del proceso Cliente o Servidor
-    #   Grupo: Clasifica a las direcciones Ip por Cliente o Servidor
-    #   Coordinador: Indica que Cliente y Servidor son coordinadores
-    #   Busy: Indica el estado ocupado/desocupado del Host
-    #
-    #
-    #   TABLA_REPLICADA
-    #   +------------+------------------+------+-----+---------+----------------+
-    #   | Field      | Type             | Null | Key | Default | Extra          |
-    #   +------------+------------------+------+-----+---------+----------------+
-    #
-    #
-
 
     #   Variables privadas
     __User        =   None
     __Password    =   None
     __DB_NAME     =   'CONTROL_DISTRIBUIDO'
     #   Variables publicas
-    cnx           =   None
+    db            =   None
     cursor        =   None
 
     def __init__(self, user, password):
@@ -64,22 +61,17 @@ class Create_DB:
         self.__User = user
         self.__Password = password
 
-        self.cnx = mysql.connector.connect(user = user, password = password)
+        self.db = MySQLdb.connect(user = user, passwd = password)
         print("Conexion establecida a la Base de Datos")
 
     def Create_DataBase(self):
         #   Este metodo crea la Base de Datos CONTROL_DISTRIBUIDO.
+        self.db = MySQLdb.connect(user = self.__User, passwd = self.__Password)
+        self.cursor = self.db.cursor()
 
-        try:
-            self.cnx = mysql.connector.connect(user = self.__User, password = self.__Password)
-            self.cursor = self.cnx.cursor()
-
-            SQL = "CREATE DATABASE IF NOT EXISTS CONTROL_DISTRIBUIDO"
-            self.cursor.execute(SQL)
-            print("Base de Datos: CONTROL_DISTRIBUIDO creada!")
-
-        except mysql.connector.Error as err:
-            print("Error al Crear la Base de Datos: {}".format(err))
+        SQL = "CREATE DATABASE IF NOT EXISTS CONTROL_DISTRIBUIDO"
+        self.cursor.execute(SQL)
+        print("Base de Datos: CONTROL_DISTRIBUIDO creada!")
 
     def Create_Tables(self):
         #   Este metodo crea las Tablas: TABLA_RUTEO y
@@ -87,20 +79,19 @@ class Create_DB:
         #   CONTROL_DISTRIBUIDO.
 
 
-        self.cnx = mysql.connector.connect(user = self.__User, password = self.__Password,
+        self.db = MySQLdb.connect(user = self.__User, passwd = self.__Password,
                                         host = '127.0.0.1',
-                                        database = self.__DB_NAME)
-        self.cursor = self.cnx.cursor()
+                                        db = self.__DB_NAME)
+
+        self.cursor = self.db.cursor()
 
         #   Creacion de la tabla: TABLA_RUTEO
         SQL = ("""CREATE TABLE IF NOT EXISTS TABLA_RUTEO (
-                ID int(10) NOT NULL auto_increment,
                 Process_ID int(10) NOT NULL,
                 IP varchar(16) NOT NULL,
                 Grupo varchar(10) NOT NULL,
                 Coordinador BIT(1) NOT NULL,
-                Busy BIT(1) NOT NULL,
-                PRIMARY KEY(ID)
+                Busy BIT(1) NOT NULL
                )ENGINE=InnoDB;""")
 
         self.cursor.execute(SQL)

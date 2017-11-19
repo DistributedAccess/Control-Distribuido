@@ -1,10 +1,8 @@
-from mysql.connector import errorcode
-import mysql.connector
 from Create_DB import *
 import commands
+import MySQLdb
 
-class Configuracion_Red:
-    #   Esta clase se dedica exclusivamente en la configuracion
+#   Esta clase se dedica exclusivamente en la configuracion
     #   de los Hosts en la red de Control_Distribuido. Los Hosts
     #   ya sean Cliete o Servidor pueden hacer uso de los metodos
     #   de esta clase, las reglas de su respectivo uso estan
@@ -25,12 +23,14 @@ class Configuracion_Red:
     #   configuraciones, la creacion de la base de datos puede ser
     #   manual o puede hacerse desde el constructor __init__.
 
+class Configuracion_Red:
+
     #   Variables privadas
     __User      =   'root'            #   Usuario de la Base de Datos
     __Password  =   '2010020726Ev'    #   Contrasena de la Base de Datos
 
     #   Variables publicas
-    cnx         =   None          #   Objeto para la Base de Datos
+    db          =   None          #   Objeto para la Base de Datos
     cursor      =   None          #   Objeto para la Base de Datos
     Pro_Id      =   None          #   Numero del process Id
     Ip          =   None          #   Direccion Ip
@@ -51,31 +51,21 @@ class Configuracion_Red:
         #   Create_DB.py para crear la Base de Datos.
 
         try:
-            self.cnx = mysql.connector.connect(user = self.__User, password = self.__Password,
+            self.db = MySQLdb.connect(user = self.__User, passwd = self.__Password,
                                           host = '127.0.0.1',
-                                          database = 'CONTROL_DISTRIBUIDO')
+                                          db = 'CONTROL_DISTRIBUIDO')
             print("Conexion establecida a la Base de Datos")
-        except mysql.connector.Error as err:
-            if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-                #   Se corrige al usuario y la contrasena
-                print("Hay un error de escritura en el Usuario y la Contrasena")
-                Usu = raw_input("Introduce el usuario: ")
-                Pas = raw_input("Introduce la contrasena: ")
-                self.Conec_DB(Usu, Pas)
 
-            elif err.errno == errorcode.ER_BAD_DB_ERROR:
-                #   Se crea la Base de datos
-                print("No existe la Base de Datos")
-                print("Creacion de la Base de Datos...")
+        except MySQLdb.DatabaseError:
+            #   Se crea la Base de datos
+            print("No existe la Base de Datos")
+            print("Creacion de la Base de Datos...")
+            x = Create_DB(self.__User, self.__Password)
+            x.Create_DataBase()
+            x.Create_Tables()
 
-                x = Create_DB(self.__User, self.__Password)
-                x.Create_DataBase()
-                x.Create_Tables()
-
-            else:
-                print(err)
         else:
-            self.cnx.close()
+            self.db.close()
 
     def Conec_DB(self, user, password):
         #   Esta funcion establece la conexion entre el objeto a
@@ -91,15 +81,17 @@ class Configuracion_Red:
         self.__User = user
         self.__Password = password
 
-        self.cnx = mysql.connector.connect(user = user, password = password,
+        self.db = MySQLdb.connect(user = user, passwd = password,
                                       host = '127.0.0.1',
-                                      database = 'CONTROL_DISTRIBUIDO')
+                                      db = 'CONTROL_DISTRIBUIDO')
+        print("Conexion establecida a la Base de Datos")
+
         return "OK"
 
     def Disco_DB(self):
         #   Esta funcion desconectara el objeto de la
         #   Base de datos.
-        self.cnx.close()
+        self.db.close()
         self.cursor.close()
         print("Desconexion de la Base de Datos")
         return "OK"
@@ -111,14 +103,14 @@ class Configuracion_Red:
 
         #   Es necesario volver a conectarse con la base de datos
         #   para poder ingresar datos en las tablas
-        self.cnx = mysql.connector.connect(user = self.__User, password = self.__Password,
+        self.db = MySQLdb.connect(user = self.__User, passwd = self.__Password,
                                       host = '127.0.0.1',
-                                      database = 'CONTROL_DISTRIBUIDO')
+                                      db = 'CONTROL_DISTRIBUIDO')
         print("Conexion establecida a la Base de Datos")
 
         #   Se crea un objeto que que utilice el metodo cursor()
         #   de mysql para poder ingresar, consultar, eliminar etc. datos
-        self.cursor = self.cnx.cursor()
+        self.cursor = self.db.cursor()
 
         self.Pro_Id         = 0
         self.Ip             = self.Ip_Host()
@@ -135,12 +127,15 @@ class Configuracion_Red:
         print("Se ha eliminado una direccion")
 
         #   Se agrega el Host a la Tabla de Ruteo
-        Agregar_Host = ("INSERT INTO TABLA_RUTEO (Process_ID, Ip, Grupo, Coordinador, Busy)"
-                        "VALUES(%s, %s, %s, %s, %s)")
-        self.cursor.execute(Agregar_Host, Host_me)
+        Agregar_Host = """INSERT INTO TABLA_RUTEO (Process_ID, Ip, Grupo, Coordinador, Busy)
+                          VALUES(%s, %s, %s, %s, %s)"""
+
+        self.cursor.fetchall()
+        self.cursor.executemany(Agregar_Host,[Host_me])
+
         print("Se ha agregado una direccion")
 
-        self.cnx.commit()
+        self.db.commit()
         self.cursor.close()
 
         self.ID_Proceso(self.Ip,self.Grupo)
@@ -151,14 +146,14 @@ class Configuracion_Red:
 
         #   Es necesario volver a conectarse con la base de datos
         #   para poder ingresar datos en las tablas
-        self.cnx = mysql.connector.connect(user = self.__User, password = self.__Password,
+        self.db = MySQLdb.connect(user = self.__User, passwd = self.__Password,
                                       host = '127.0.0.1',
-                                      database = 'CONTROL_DISTRIBUIDO')
+                                      db = 'CONTROL_DISTRIBUIDO')
         print("Conexion establecida a la Base de Datos")
 
         #   Se crea un objeto que que utilice el metodo cursor()
         #   de mysql para poder ingresar, consultar, eliminar etc. datos
-        self.cursor = self.cnx.cursor()
+        self.cursor = self.db.cursor()
 
         Ip = self.Ip_Host()
         Eliminar_Host =  ("DELETE FROM TABLA_RUTEO WHERE IP = '%s'" % Ip)
@@ -166,7 +161,7 @@ class Configuracion_Red:
         self.cursor.execute(Eliminar_Host)
         print("Se ha eliminado una direccion")
 
-        self.cnx.commit()
+        self.db.commit()
         self.cursor.close()
 
     def Agregar_Host(self, Ip, Grupo):
@@ -176,14 +171,14 @@ class Configuracion_Red:
 
         #   Es necesario volver a conectarse con la base de datos
         #   para poder ingresar datos en las tablas
-        self.cnx = mysql.connector.connect(user = self.__User, password = self.__Password,
+        self.db = MySQLdb.connect(user = self.__User, passwd = self.__Password,
                                       host = '127.0.0.1',
-                                      database = 'CONTROL_DISTRIBUIDO')
+                                      db = 'CONTROL_DISTRIBUIDO')
         print("Conexion establecida a la Base de Datos")
 
         #   Se crea un objeto que que utilice el metodo cursor()
         #   de mysql para poder ingresar, consultar, eliminar etc. datos
-        self.cursor = self.cnx.cursor()
+        self.cursor = self.db.cursor()
 
         self.Pro_Id         = 0
         self.Ip             = Ip
@@ -200,12 +195,14 @@ class Configuracion_Red:
         print("Se ha eliminado una direccion")
 
         #   Se agrega el Host a la Tabla de Ruteo
-        Agregar_Host = ("INSERT INTO TABLA_RUTEO (Process_ID, Ip, Grupo, Coordinador, Busy)"
-                        "VALUES(%s, %s, %s, %s, %s)")
-        self.cursor.execute(Agregar_Host, Host_me)
+        Agregar_Host = """INSERT INTO TABLA_RUTEO (Process_ID, Ip, Grupo, Coordinador, Busy)
+                          VALUES(%s, %s, %s, %s, %s)"""
+
+        self.cursor.fetchall()
+        self.cursor.executemany(Agregar_Host,[Host_me])
         print("Se ha agregado una direccion")
 
-        self.cnx.commit()
+        self.db.commit()
         self.cursor.close()
 
         self.ID_Proceso(Ip,Grupo)
@@ -217,21 +214,21 @@ class Configuracion_Red:
 
         #   Es necesario volver a conectarse con la base de datos
         #   para poder ingresar datos en las tablas
-        self.cnx = mysql.connector.connect(user = self.__User, password = self.__Password,
+        self.db = MySQLdb.connect(user = self.__User, passwd = self.__Password,
                                       host = '127.0.0.1',
-                                      database = 'CONTROL_DISTRIBUIDO')
+                                      db = 'CONTROL_DISTRIBUIDO')
         print("Conexion establecida a la Base de Datos")
 
         #   Se crea un objeto que que utilice el metodo cursor()
         #   de mysql para poder ingresar, consultar, eliminar etc. datos
-        self.cursor = self.cnx.cursor()
+        self.cursor = self.db.cursor()
 
         Eliminar_Host =  ("DELETE FROM TABLA_RUTEO WHERE IP = '%s'" % Ip)
 
         self.cursor.execute(Eliminar_Host)
         print("Se ha eliminado una direccion")
 
-        self.cnx.commit()
+        self.db.commit()
         self.cursor.close()
         return "OK"
 
@@ -286,14 +283,14 @@ class Configuracion_Red:
 
         #   Es necesario volver a conectarse con la base de datos
         #   para poder ingresar datos en las tablas
-        self.cnx = mysql.connector.connect(user = self.__User, password = self.__Password,
+        self.db = MySQLdb.connect(user = self.__User, passwd = self.__Password,
                                       host = '127.0.0.1',
-                                      database = 'CONTROL_DISTRIBUIDO')
+                                      db = 'CONTROL_DISTRIBUIDO')
         print("Conexion establecida a la Base de Datos")
 
         #   Se crea un objeto que que utilice el metodo cursor()
         #   de mysql para poder ingresar, consultar, eliminar etc. datos
-        self.cursor = self.cnx.cursor()
+        self.cursor = self.db.cursor()
 
         A = 0
 
@@ -313,9 +310,9 @@ class Configuracion_Red:
 
         self.cursor.execute(Update)
 
-        self.cnx.commit()
+        self.db.commit()
         self.cursor.close()
-        self.cnx.close()
+        self.db.close()
 
     def Ip_Host(self):
         #   Esta funcion regresa la direccion ip del Host
