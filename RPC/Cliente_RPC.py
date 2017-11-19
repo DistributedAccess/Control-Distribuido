@@ -38,18 +38,17 @@ Host_me         =   None
 for i in range(len(m)):
     for j in range(len(m[i])):
         #print str(m[i][j])
-        Id      = m[i][0]
-        Pid     = m[i][1]
-        Ip      = m[i][2]
-        Grup    = m[i][3]
-        Coor    = m[i][4]
-        Bus     = m[i][5]
+        Pid     = m[i][0]
+        Ip      = m[i][1]
+        Grup    = m[i][2]
+        Coor    = m[i][3]
+        Bus     = m[i][4]
 
 
-    Host_me = (Id, Pid, Ip, Grup, Coor, Bus)
-    cursor.fetchall()
+    Host_me = (Pid, Ip, Grup, Coor, Bus)
+    #cursor.fetchall()
     cursor.executemany(Agregar_Host,[Host_me])
 
 
-cnx.commit()
+db.commit()
 cursor.close()
