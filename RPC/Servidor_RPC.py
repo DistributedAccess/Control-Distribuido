@@ -3,7 +3,7 @@ from Configuracion_Red import Configuracion_Red
 from Servidor_Distribuido import *
 
 #   Configuracion del RPC
-Server = SimpleXMLRPCServer(("localhost", 2018))
+Server = SimpleXMLRPCServer(("192.168.0.8", 2018))
 
 #   Se inicializa la tabla de Ruteo y la Base de Datos
 #   este es el unico lugar donde se mandara a llamar al

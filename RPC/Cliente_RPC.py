@@ -1,13 +1,20 @@
-from mysql.connector import errorcode
+from Create_DB import *
 import MySQLdb
 from SimpleXMLRPCServer import SimpleXMLRPCServer
 import xmlrpclib
+import Ip_Host
+
+DB = Create_DB.Create_DB("root","2010020726Ev")
+DB.Create_DataBase()
+DB.Create_Tables()
+
+HOST = Ip_Host.Ip_Host()
+
+Server = xmlrpclib.ServerProxy("http://192.168.0.8:2018")
 
 
-Server = xmlrpclib.ServerProxy("http://localhost:2018")
 
-
-m = Server.Ingresar('11.5.20.18','Servidor')
+m = Server.Ingresar(HOST,'Cliente')
 print(m)
 
 db = MySQLdb.connect(user = 'root', passwd = '2010020726Ev',
@@ -40,7 +47,7 @@ for i in range(len(m)):
         Coor    = m[i][4]
         Bus     = m[i][5]
 
-        
+
     Host_me = (Id, Pid, Ip, Grup, Coor, Bus)
     cursor.fetchall()
     cursor.executemany(Agregar_Host,[Host_me])
