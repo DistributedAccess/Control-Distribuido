@@ -22,7 +22,10 @@ print("Conexion establecida a la Base de Datos")
 
 cursor = db.cursor()
 
-#Host_me = (self.Pro_Id, self.Ip, self.Grupo, self.Coordinador, self.Busy)
+Eliminar_Registros = """DELETE FROM TABLA_RUTEO """"
+
+cursor.execute(Eliminar_Registros)
+
 Agregar_Host = """INSERT INTO TABLA_RUTEO (Process_ID, Ip, Grupo, Coordinador, Busy)
                   VALUES(%s, %s, %s, %s, %s)"""
 
