@@ -3,7 +3,6 @@ from Configuracion_Red import *
 class Control_Distribuido:
 
     Red      = None      #   Objeto de Configuracion_Red
-    Replica  = None      #   Variable de TABLA_RUTEO
 
     def __init__(self, Grupo):
         self.Red = Configuracion_Red(Grupo)
@@ -13,18 +12,20 @@ class Control_Distribuido:
         #   Replicacion solo responde a las solicitudes
         #   enviando asi las tablas solicitadas.
         #   Trabaja junto con Actualizar()
+        Replica  = None      #   Variable de TABLA_RUTEO
+
         if (Grupo == "Servidor"):
             if (Opcion == "Ruteo"):
-                self.Replica = self.Red.Consultar("Ruteo")
+                Replica = self.Red.Consultar("Ruteo")
             elif (Opcion == "Total"):
-                self.Replica = self.Red.Consultar("Total")
+                Replica = self.Red.Consultar("Total")
         elif (Grupo == "Cliente"):
             if (Opcion == "Ruteo"):
-                self.Replica = self.Red.Consultar("Ruteo")
+                Replica = self.Red.Consultar("Ruteo")
             elif (Opcion == "Replica"):
-                self.Replica == self.Red.Consultar("Replica")
+                Replica == self.Red.Consultar("Replica")
 
-        return self.Replica
+        return Replica
 
     def Actualizar(self, Grupo, Opcion, Data):
         #   Actualizar recibe las tablas de las

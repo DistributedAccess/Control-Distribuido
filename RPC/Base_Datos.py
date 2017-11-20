@@ -117,7 +117,9 @@ class Base_Datos:
         return rows
 
     def Actualizar(self, Grupo, Opcion, Data):
-
+        #   Actualizar recibe las tablas de las bases de
+        #   datos a Actualizar dependiendo del grupo y
+        #   que tipo de tabla a actualizar
         self.db = MySQLdb.connect(user = self.__User, passwd = self.__Password,
                                       host = '127.0.0.1',
                                       db = 'CONTROL_DISTRIBUIDO')

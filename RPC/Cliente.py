@@ -26,6 +26,8 @@ Escucha.register_instance(Client)
 #   HABLA RPC
 IP_CLIENTE = None   #Direccion IP del Cliente a Comunicarse
 def Hablars():
+    #   Las siguientes lineas ingresan al Servidor
+    #   en la primera vez que hay conexion a este
     IP_CLIENTE = 'http://192.168.0.8:2020'      #DEFAULT
     Habla = xmlrpclib.ServerProxy(IP_CLIENTE)
     Datos = Habla.Ingresar(HOST,"Cliente","Idle")
