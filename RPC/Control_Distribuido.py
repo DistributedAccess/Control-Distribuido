@@ -2,16 +2,45 @@ from Configuracion_Red import *
 
 class Control_Distribuido:
 
-    Red = None
-    TB  = None
+    Red      = None      #   Objeto de Configuracion_Red
+    Replica  = None      #   Variable de TABLA_RUTEO
 
-    def __init__(self):
-        self.Red = Configuracion_Red()
+    def __init__(self, Grupo):
+        self.Red = Configuracion_Red(Grupo)
         print("Constructor CD")
 
-    def Replicacion(self):
-        print("Replicacion")
-        return "OK"
+    def Replicacion(self, Grupo, Opcion):
+        #   Replicacion solo responde a las solicitudes
+        #   enviando asi las tablas solicitadas.
+        #   Trabaja junto con Actualizar()
+        if (Grupo == "Servidor"):
+            if (Opcion == "Ruteo"):
+                self.Replica = self.Red.Consultar("Ruteo")
+            elif (Opcion == "Total"):
+                self.Replica = self.Red.Consultar("Total")
+        elif (Grupo == "Cliente"):
+            if (Opcion == "Ruteo"):
+                self.Replica = self.Red.Consultar("Ruteo")
+            elif (Opcion == "Replica"):
+                self.Replica == self.Red.Consultar("Replica")
+
+        return self.Replica
+
+    def Actualizar(self, Grupo, Opcion, Data):
+        #   Actualizar recibe las tablas de las
+        #   bases de datos por parte de Replicacion()
+        if (Grupo == "Servidor"):
+            if (Opcion == "Ruteo"):
+                pass
+            elif (Opcion == "Total"):
+                pass
+        elif (Grupo == "Cliente"):
+            if (Opcion == "Ruteo"):
+                hdmfgidutfxcjfkdhxmcjhkzfnxcjgdkhxfmgh
+                hhfchgjfdhxgcjflkgch
+                kdfghjgluiyutcghlsusjfgio;
+            elif (Opcion == "Replica"):
+                pass
 
     def Eleccion(self):
         print("Eleccion")

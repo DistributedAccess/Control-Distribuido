@@ -22,15 +22,15 @@ print("Conexion establecida a la Base de Datos")
 
 cursor = db.cursor()
 
-Eliminar_Registros = """DELETE FROM TABLA_RUTEO """"
+Eliminar_Registros = """DELETE FROM TABLA_RUTEO """
 
 cursor.execute(Eliminar_Registros)
 
-Agregar_Host = """INSERT INTO TABLA_RUTEO (Process_ID, Ip, Grupo, Coordinador, Busy)
+Agregar_Host = """INSERT INTO TABLA_RUTEO (Process_ID, Laboratorio, Ip, Grupo, Coordinador)
                   VALUES(%s, %s, %s, %s, %s)"""
 
-Id              =   None
 Pid             =   None
+Lab             =   None
 Ip              =   None
 Grup            =   None
 Coor            =   None
@@ -42,13 +42,13 @@ for i in range(len(m)):
     for j in range(len(m[i])):
         #print str(m[i][j])
         Pid     = m[i][0]
-        Ip      = m[i][1]
-        Grup    = m[i][2]
-        Coor    = m[i][3]
-        Bus     = m[i][4]
+        Lab     = m[i][1]
+        Ip      = m[i][2]
+        Grup    = m[i][3]
+        Coor    = m[i][4]
 
 
-    Host_me = (Pid, Ip, Grup, Coor, Bus)
+    Host_me = (Pid, Lab, Ip, Grup, Coor)
     #cursor.fetchall()
     cursor.executemany(Agregar_Host,[Host_me])
 

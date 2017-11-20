@@ -33,15 +33,15 @@ class Configuracion_Red:
     db          =   None          #   Objeto para la Base de Datos
     cursor      =   None          #   Objeto para la Base de Datos
     Pro_Id      =   None          #   Numero del process Id
+    Lab         =   None          #   Identificador del Laboratorio
     Ip          =   None          #   Direccion Ip
     Grupo       =   None          #   Tipo de Host Cliente o Servidor
     Coordinador =   None          #   Bandera del Coordinador
-    Busy        =   None          #   Bandera de Estado Ocupado/Desocupado
     Server      =   0             #   Cuenta a los Servidores conectados
     Client      =   0             #   Cuenta a los Clientes conectados
 
 
-    def __init__(self):
+    def __init__(self, Grupo):
         #   Constructor de la clase, que  establece la conexion a
         #   la Base de Datos, en caso de no conectarse se llamara
         #   automaticamente al metodo Conec_DB(self, user, password)
@@ -62,7 +62,13 @@ class Configuracion_Red:
             print("Creacion de la Base de Datos...")
             x = Create_DB(self.__User, self.__Password)
             x.Create_DataBase()
-            x.Create_Tables()
+
+            if (Grupo == "Servidor"):
+                x.Create_Ruteo()
+                x.Create_ReplicaTotal()
+            elif (Grupo == "Cliente"):
+                x.Create_Ruteo()
+                x.Create_ReplicaParcial()
 
         else:
             self.db.close()
@@ -96,7 +102,7 @@ class Configuracion_Red:
         print("Desconexion de la Base de Datos")
         return "OK"
 
-    def Agregar_Propio(self, Grupo):
+    def Agregar_Propio(self, Grupo, Laboratorio):
         #   Esta funcion agrega a la Base de Datos la direccion
         #   Ip del Host, asegurandose que la direccion sea unica
         #   en la tabla de ruteo.
@@ -113,12 +119,12 @@ class Configuracion_Red:
         self.cursor = self.db.cursor()
 
         self.Pro_Id         = 0
+        self.Lab            = Laboratorio
         self.Ip             = self.Ip_Host()
         self.Grupo          = Grupo
         self.Coordinador    = 0
-        self.Busy           = 0
 
-        Host_me = (self.Pro_Id, self.Ip, self.Grupo, self.Coordinador, self.Busy)
+        Host_me = (self.Pro_Id, self.Lab, self.Ip, self.Grupo, self.Coordinador)
 
         #   Eliminar Host para asegurar que este sea el
         #   unico en la Tabla de Ruteo
@@ -127,7 +133,7 @@ class Configuracion_Red:
         print("Se ha eliminado una direccion")
 
         #   Se agrega el Host a la Tabla de Ruteo
-        Agregar_Host = """INSERT INTO TABLA_RUTEO (Process_ID, Ip, Grupo, Coordinador, Busy)
+        Agregar_Host = """INSERT INTO TABLA_RUTEO (Process_ID, Laboratorio, Ip, Grupo, Coordinador)
                           VALUES(%s, %s, %s, %s, %s)"""
 
         self.cursor.fetchall()
@@ -164,7 +170,7 @@ class Configuracion_Red:
         self.db.commit()
         self.cursor.close()
 
-    def Agregar_Host(self, Ip, Grupo):
+    def Agregar_Host(self, Ip, Grupo, Laboratorio):
         #   Esta funcion agrega a la Base de Datos direcciones Ip,
         #   externas al host, asegurandose que la direccion sea unica
         #   en la tabla de ruteo
@@ -181,12 +187,12 @@ class Configuracion_Red:
         self.cursor = self.db.cursor()
 
         self.Pro_Id         = 0
+        self.Lab            = Laboratorio
         self.Ip             = Ip
         self.Grupo          = Grupo
         self.Coordinador    = 0
-        self.Busy           = 0
 
-        Host_me = (self.Pro_Id, self.Ip, self.Grupo, self.Coordinador, self.Busy)
+        Host_me = (self.Pro_Id, self.Lab, self.Ip, self.Grupo, self.Coordinador)
 
         #   Eliminar Host para asegurar que este sea el
         #   unico en la Tabla de Ruteo
@@ -195,7 +201,7 @@ class Configuracion_Red:
         print("Se ha eliminado una direccion")
 
         #   Se agrega el Host a la Tabla de Ruteo
-        Agregar_Host = """INSERT INTO TABLA_RUTEO (Process_ID, Ip, Grupo, Coordinador, Busy)
+        Agregar_Host = """INSERT INTO TABLA_RUTEO (Process_ID, Laboratorio, Ip, Grupo, Coordinador)
                           VALUES(%s, %s, %s, %s, %s)"""
 
         self.cursor.fetchall()
@@ -232,9 +238,9 @@ class Configuracion_Red:
         self.cursor.close()
         return "OK"
 
-    def Consultar(self):
-        #   Esta funcion consulta a la Base de Datos la tabla
-        #   de ruteo
+    def Consultar(self, Opcion):
+        #   Esta funcion consulta las tablas
+        #   de la Base de Datos
 
         #   Es necesario volver a conectarse con la base de datos
         #   para poder ingresar datos en las tablas
@@ -247,15 +253,19 @@ class Configuracion_Red:
         #   de mysql para poder ingresar, consultar, eliminar etc. datos
         self.cursor = self.db.cursor()
 
-        Query = ("SELECT * FROM TABLA_RUTEO")
+        if (Opcion == "Ruteo"):
+            Query = ("SELECT * FROM TABLA_RUTEO")
+            self.cursor.execute(Query)
 
-        self.cursor.execute(Query)
+        elif (Opcion == "Total"):
+            Query = ("SELECT * FROM USUARIOS")
+            self.cursor.execute(Query)
 
-        rows = self.cursor.fetchall()    #Se guarda en una matriz la consulta wooow
-                                        #Me ahorro lineas de codigo
-        '''for row in rows:
-            print row'''
+        elif (Opcion == "Replica"):
+            Query = ("SELECT * FROM USUARIOS_REPLICA")
+            self.cursor.execute(Query)
 
+        rows = self.cursor.fetchall()
         self.cursor.close()
         return rows
 
