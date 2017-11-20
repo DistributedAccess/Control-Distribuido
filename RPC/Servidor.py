@@ -9,6 +9,7 @@ import time
 #   ESCUCHA RPC
 HOST = Ip_Host.Ip_Host()
 Red = Configuracion_Red("Servidor")       #Configuracion de la Red y DB
+Red.Agregar_Propio("Servidor","LOCAL")    #Agregar host propio a la DB
 Escucha = SimpleXMLRPCServer((HOST,2020)) #Configuracion del Objeto RPC
 Server = Servidor_Distribuido()           #Configuracion del Objeto distribuido
 #   FUNCIONES ESCUCHA

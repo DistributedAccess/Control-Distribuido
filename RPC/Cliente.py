@@ -32,11 +32,11 @@ def Hablars():
     Habla = xmlrpclib.ServerProxy(IP_CLIENTE)
     Datos = Habla.Ingresar(HOST,"Cliente","Idle")
     Client.Actualizar("Cliente","Ruteo",Datos)
-    '''while(True):
+    while(True):
         Habla = xmlrpclib.ServerProxy('http://192.168.0.8:2020')
         time.sleep(3)
-        print Habla.Mensaje()
-        print Habla.Mensaje_2()'''
+        #print Habla.Mensaje()
+        #print Habla.Mensaje_2()
 
 
 
