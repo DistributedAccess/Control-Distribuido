@@ -137,7 +137,6 @@ class Configuracion_Red(Base_Datos):
         self.cursor.close()
 
         self.ID_Proceso(Ip,Grupo)
-        return "OK"
 
     def Eliminar_Host(self, Ip):
         #   Esta funcion elimina de la Base de Datos direcciones Ip,

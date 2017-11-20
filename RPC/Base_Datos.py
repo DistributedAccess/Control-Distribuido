@@ -172,7 +172,7 @@ class Base_Datos:
                 Host_me             = None
 
                 for i in range(len(Data)):
-                    for j in range(len(Data[i]))
+                    for j in range(len(Data[i])):
                         self.Nom            = Data[i][0]
                         self.LBP            = Data[i][1]
                         self.Lab            = Data[i][2]
@@ -227,7 +227,7 @@ class Base_Datos:
                 Host_me             = None
 
                 for i in range(len(Data)):
-                    for j in range(len(Data[i]))
+                    for j in range(len(Data[i])):
                         self.Nom            = Data[i][0]
                         self.LBP            = Data[i][1]
 

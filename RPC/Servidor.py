@@ -38,4 +38,4 @@ hilo1 = threading.Thread(target = Escucha.serve_forever)
 hilo2 = threading.Thread(target = Hablars)
 
 hilo1.start()
-hilo2.start()
+#hilo2.start()

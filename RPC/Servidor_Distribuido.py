@@ -12,6 +12,6 @@ class Servidor_Distribuido(Control_Distribuido):
         #   dentro, regresara la tabla de ruteo al host.
 
         self.Red.Agregar_Host(Ip,Grupo,Laboratorio)
-        self.Replica = self.Red.Consultar("Ruteo")
+        Replica = self.Red.Consultar("Ruteo")
 
-        return self.TB
+        return Replica
