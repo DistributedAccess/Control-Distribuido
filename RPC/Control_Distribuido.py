@@ -29,18 +29,7 @@ class Control_Distribuido:
     def Actualizar(self, Grupo, Opcion, Data):
         #   Actualizar recibe las tablas de las
         #   bases de datos por parte de Replicacion()
-        if (Grupo == "Servidor"):
-            if (Opcion == "Ruteo"):
-                pass
-            elif (Opcion == "Total"):
-                pass
-        elif (Grupo == "Cliente"):
-            if (Opcion == "Ruteo"):
-                hdmfgidutfxcjfkdhxmcjhkzfnxcjgdkhxfmgh
-                hhfchgjfdhxgcjflkgch
-                kdfghjgluiyutcghlsusjfgio;
-            elif (Opcion == "Replica"):
-                pass
+        self.Red.Actualizar(Grupo,Opcion,Data)
 
     def Eleccion(self):
         print("Eleccion")

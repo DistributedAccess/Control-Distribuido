@@ -49,7 +49,6 @@ for i in range(len(m)):
 
 
     Host_me = (Pid, Lab, Ip, Grup, Coor)
-    #cursor.fetchall()
     cursor.executemany(Agregar_Host,[Host_me])
 
 
