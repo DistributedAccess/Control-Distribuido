@@ -23,6 +23,10 @@ from Base_Datos import *
 
 class Configuracion_Red(Base_Datos):
 
+    #   Variables privadas (NO SON HEREDABLES)
+    __User      =   'root'            #   Usuario de la Base de Datos
+    __Password  =   '2010020726Ev'    #   Contrasena de la Base de Datos
+
     def __init__(self, Grupo):
         Base_Datos.__init__(self,Grupo)
         print("Constructor CR")
