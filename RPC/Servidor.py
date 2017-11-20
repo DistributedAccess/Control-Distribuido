@@ -30,8 +30,8 @@ def Hablars():
     while(True):
         Habla = xmlrpclib.ServerProxy('http://192.168.0.5:2020')
         time.sleep(3)
-        print Habla.Msg()
-        print Habla.Msg_2()
+        #print Habla.Msg()
+        #print Habla.Msg_2()
 
 
 

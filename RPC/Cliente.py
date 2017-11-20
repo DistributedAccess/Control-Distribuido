@@ -28,10 +28,10 @@ IP_CLIENTE = None   #Direccion IP del Cliente a Comunicarse
 def Hablars():
     #   Las siguientes lineas ingresan al Servidor
     #   en la primera vez que hay conexion a este
-    IP_CLIENTE = 'http://192.168.0.8:2020'      #DEFAULT
-    Habla = xmlrpclib.ServerProxy(IP_CLIENTE)
-    Datos = Habla.Ingresar(HOST,"Cliente","Idle")
-    Client.Actualizar("Cliente","Ruteo",Datos)
+    IP_CLIENTE = 'http://192.168.0.8:2020'          #DEFAULT
+    Habla = xmlrpclib.ServerProxy(IP_CLIENTE)       #INGRESA
+    Datos = Habla.Ingresar(HOST,"Cliente","Idle")   #AGREGA SU INFO
+    Client.Actualizar("Cliente","Ruteo",Datos)      #ACTUALIZA SU PROPIA TR
     while(True):
         Habla = xmlrpclib.ServerProxy('http://192.168.0.8:2020')
         time.sleep(3)
