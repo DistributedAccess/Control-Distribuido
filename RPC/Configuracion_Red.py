@@ -29,7 +29,7 @@ class Configuracion_Red(Base_Datos):
 
     def __init__(self, Grupo):
         Base_Datos.__init__(self,Grupo)
-        print("Constructor CR")
+        print("Constructor Configuracion_Red Listo!")
 
     def Agregar_Propio(self, Grupo, Laboratorio):
         #   Esta funcion agrega a la Base de Datos la direccion
@@ -109,7 +109,7 @@ class Configuracion_Red(Base_Datos):
         self.db = MySQLdb.connect(user = self.__User, passwd = self.__Password,
                                       host = '127.0.0.1',
                                       db = 'CONTROL_DISTRIBUIDO')
-        print("Conexion establecida a la Base de Datos")
+        print("Conexion establecida a la Base de Datos: CONTROL_DISTRIBUIDO")
 
         #   Se crea un objeto que que utilice el metodo cursor()
         #   de mysql para poder ingresar, consultar, eliminar etc. datos
@@ -127,7 +127,7 @@ class Configuracion_Red(Base_Datos):
         #   unico en la Tabla de Ruteo
         Eliminar_Host =  ("DELETE FROM TABLA_RUTEO WHERE IP = '%s'" % Ip)
         self.cursor.execute(Eliminar_Host)
-        print("Se ha eliminado una direccion")
+        print("Se ha eliminado la direccion: ", Ip)
 
         #   Se agrega el Host a la Tabla de Ruteo
         Agregar_Host = """INSERT INTO TABLA_RUTEO (Process_ID, Laboratorio, Ip, Grupo, Coordinador)
@@ -135,7 +135,7 @@ class Configuracion_Red(Base_Datos):
 
         self.cursor.fetchall()
         self.cursor.executemany(Agregar_Host,[Host_me])
-        print("Se ha agregado una direccion")
+        print("Se ha agregado la direccion: ", Ip)
 
         self.db.commit()
         self.cursor.close()
@@ -190,7 +190,6 @@ class Configuracion_Red(Base_Datos):
         self.db = MySQLdb.connect(user = self.__User, passwd = self.__Password,
                                       host = '127.0.0.1',
                                       db = 'CONTROL_DISTRIBUIDO')
-        print("Conexion establecida a la Base de Datos")
 
         #   Se crea un objeto que que utilice el metodo cursor()
         #   de mysql para poder ingresar, consultar, eliminar etc. datos
@@ -212,6 +211,8 @@ class Configuracion_Red(Base_Datos):
                      Process_ID = '%s'
                      WHERE IP = '%s'""" %(A,Ip))
 
+        print("Numero de process ID: ", A)
+
         self.cursor.execute(Update)
 
         self.db.commit()
@@ -229,3 +230,27 @@ class Configuracion_Red(Base_Datos):
         Espacio = Ip.find(" ")
         Ip = Ip[0:Espacio]
         return Ip
+
+    def Consultar_Ruta(self, Process_ID, Grupo, Coordinador):
+
+        Ruteo = self.Consultar("Ruteo")
+        Data = None
+
+        for i in range(len(Ruteo)):
+            for j in range(len(Ruteo[i])):
+                Pro_Id         = Ruteo[i][0]
+                Ip             = Ruteo[i][2]
+                Grup           = Ruteo[i][3]
+                Coord          = Ruteo[i][4]
+
+                if((Grupo == "Cliente") and (Grup == "Cliente")):
+                    #   SI EL HOST QUE DESEE CONSULTAR LA
+                    #   RUTA, ES UN CLIENTE SOLO NECESITARA
+                    #   LA IP DEL COORDINADOR CLIENTE
+                    if((Coordinador == 0) and (Coord == 1)):
+                        #   DATA ES IGUAL A LA IP DEL COORDINADOR
+                        Data = Ip
+
+                    if(Coordinador == 1):
+                        Data = Ip
+        return Data

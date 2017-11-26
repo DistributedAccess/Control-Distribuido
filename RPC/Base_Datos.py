@@ -37,22 +37,27 @@ class Base_Datos:
                                           host = '127.0.0.1',
                                           db = 'CONTROL_DISTRIBUIDO')
             print("Conexion establecida a la Base de Datos")
-            print("Constructor BD")
+            print("Constructor Base_Datos")
 
         except MySQLdb.DatabaseError:
             #   Se crea la Base de datos
-            print("No existe la Base de Datos")
+            print("No existe la Base de Datos: CONTROL_DISTRIBUIDO")
             print("Creacion de la Base de Datos...")
             x = Create_DB(self.__User, self.__Password)
             x.Create_DataBase()
             #   Se crean las Tablas
             if (Grupo == "Servidor"):
                 x.Create_Ruteo()
-                x.Create_ReplicaTotal()
+                x.Create_Usuarios()
+                x.Create_Bitacora()
+                x.Create_Laboratorio()
+                x.Create_Horario()
             elif (Grupo == "Cliente"):
                 x.Create_Ruteo()
-                x.Create_ReplicaParcial()
-            print("Constructor BD")
+                x.Create_HorarioBB()
+                x.Create_UsuariosBB()
+                x.Create_BitacoraBB()
+            print("Constructor Base_Datos Listo!")
         else:
             self.db.close()
 
@@ -94,7 +99,7 @@ class Base_Datos:
         self.db = MySQLdb.connect(user = self.__User, passwd = self.__Password,
                                       host = '127.0.0.1',
                                       db = 'CONTROL_DISTRIBUIDO')
-        print("Conexion establecida a la Base de Datos")
+        print("Conexion establecida a la Base de Datos: CONTROL_DISTRIBUIDO")
 
         #   Se crea un objeto que que utilice el metodo cursor()
         #   de mysql para poder ingresar, consultar, eliminar etc. datos
@@ -104,12 +109,32 @@ class Base_Datos:
             Query = ("SELECT * FROM TABLA_RUTEO")
             self.cursor.execute(Query)
 
-        elif (Opcion == "Total"):
+        elif (Opcion == "Usuarios"):
             Query = ("SELECT * FROM USUARIOS")
             self.cursor.execute(Query)
 
-        elif (Opcion == "Replica"):
-            Query = ("SELECT * FROM USUARIOS_REPLICA")
+        elif (Opcion == "Bitacora"):
+            Query = ("SELECT * FROM BITACORA")
+            self.cursor.execute(Query)
+
+        elif (Opcion == "Laboratorio"):
+            Query = ("SELECT * FROM LABORATORIO")
+            self.cursor.execute(Query)
+
+        elif (Opcion == "Horario"):
+            Query = ("SELECT * FROM HORARIO")
+            self.cursor.execute(Query)
+
+        elif (Opcion == "HorarioBB"):
+            Query = ("SELECT * FROM HORARIOBB")
+            self.cursor.execute(Query)
+
+        elif (Opcion == "UsuariosBB"):
+            Query = ("SELECT * FROM USUARIOSBB")
+            self.cursor.execute(Query)
+
+        elif (Opcion == "BitacoraBB"):
+            Query = ("SELECT * FROM BITACORABB")
             self.cursor.execute(Query)
 
         rows = self.cursor.fetchall()

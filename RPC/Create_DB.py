@@ -202,7 +202,6 @@ class Create_DB:
         self.cursor.execute(QUERY)
         print("Tabla: HORARIOBB creada!")
 
-
     def Create_UsuariosBB(self):
         #   Este metodo crea la Tabla: USUARIOSBB
         #   de la Base de Datos CONTROL_DISTRIBUIDO
