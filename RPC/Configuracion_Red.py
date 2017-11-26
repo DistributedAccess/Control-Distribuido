@@ -232,7 +232,11 @@ class Configuracion_Red(Base_Datos):
         return Ip
 
     def Consultar_Ruta(self, Process_ID, Grupo, Coordinador):
-
+        #   Esta funcion regresa la direccion ip que se este
+        #   pidiendo a traves del Process_ID, Grupo y
+        #   Coordinador de la Tabla de Ruteo, esta funcion,
+        #   suele ser utilizada para direccionar mensajes,
+        #   pedir recursos etc.
         Ruteo = self.Consultar("Ruteo")
         Data = None
 
@@ -267,5 +271,4 @@ class Configuracion_Red(Base_Datos):
                     else:
                         if((Grup == "Servidor") and (Pro_Id == Process_ID)):
                             Data = Ip
-
         return Data
