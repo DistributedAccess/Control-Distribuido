@@ -246,10 +246,26 @@ class Configuracion_Red(Base_Datos):
                     Coord          = Ruteo[i][4]
 
                     if(Coordinador == 1):
-                        if((Grupo == "Cliente") and (Coord == 1)):
+                        if((Grup == "Cliente") and (Coord == 1)):
                             Data = Ip
                     else:
                         if((Grup == "Cliente") and (Pro_Id == Process_ID)):
+                            Data = Ip
+
+        if(Grupo == "Servidor"):
+
+            for i in range(len(Ruteo)):
+                for j in range(len(Ruteo[i])):
+                    Pro_Id         = Ruteo[i][0]
+                    Ip             = Ruteo[i][2]
+                    Grup           = Ruteo[i][3]
+                    Coord          = Ruteo[i][4]
+
+                    if(Coordinador == 1):
+                        if((Grup == "Servidor") and (Coord == 1)):
+                            Data = Ip
+                    else:
+                        if((Grup == "Servidor") and (Pro_Id == Process_ID)):
                             Data = Ip
 
         return Data
