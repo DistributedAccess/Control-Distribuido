@@ -31,7 +31,7 @@ class Configuracion_Red(Base_Datos):
         Base_Datos.__init__(self,Grupo)
         print("Constructor Configuracion_Red Listo!")
 
-    def Agregar_Propio(self, Grupo, Laboratorio):
+    def Agregar_Propio(self, Grupo, Laboratorio, Coordinador):
         #   Esta funcion agrega a la Base de Datos la direccion
         #   Ip del Host, asegurandose que la direccion sea unica
         #   en la tabla de ruteo.
@@ -41,7 +41,7 @@ class Configuracion_Red(Base_Datos):
         self.db = MySQLdb.connect(user = self.__User, passwd = self.__Password,
                                       host = '127.0.0.1',
                                       db = 'CONTROL_DISTRIBUIDO')
-        print("Conexion establecida a la Base de Datos")
+        print("Conexion establecida a la Base de Datos: CONTROL_DISTRIBUIDO")
 
         #   Se crea un objeto que que utilice el metodo cursor()
         #   de mysql para poder ingresar, consultar, eliminar etc. datos
@@ -51,7 +51,7 @@ class Configuracion_Red(Base_Datos):
         self.Lab            = Laboratorio
         self.Ip             = self.Ip_Host()
         self.Grupo          = Grupo
-        self.Coordinador    = 0
+        self.Coordinador    = Coordinador
 
         Host_me = (self.Pro_Id, self.Lab, self.Ip, self.Grupo, self.Coordinador)
 
@@ -59,7 +59,7 @@ class Configuracion_Red(Base_Datos):
         #   unico en la Tabla de Ruteo
         Eliminar_Host =  ("DELETE FROM TABLA_RUTEO WHERE IP = '%s'" % self.Ip)
         self.cursor.execute(Eliminar_Host)
-        print("Se ha eliminado una direccion")
+        print("Se ha eliminado la direccion: ", Ip)
 
         #   Se agrega el Host a la Tabla de Ruteo
         Agregar_Host = """INSERT INTO TABLA_RUTEO (Process_ID, Laboratorio, Ip, Grupo, Coordinador)
@@ -68,7 +68,7 @@ class Configuracion_Red(Base_Datos):
         self.cursor.fetchall()
         self.cursor.executemany(Agregar_Host,[Host_me])
 
-        print("Se ha agregado una direccion")
+        print("Se ha agregado la direccion: ", Ip)
 
         self.db.commit()
         self.cursor.close()
@@ -99,7 +99,7 @@ class Configuracion_Red(Base_Datos):
         self.db.commit()
         self.cursor.close()
 
-    def Agregar_Host(self, Ip, Grupo, Laboratorio):
+    def Agregar_Host(self, Ip, Grupo, Laboratorio, Coordinador):
         #   Esta funcion agrega a la Base de Datos direcciones Ip,
         #   externas al host, asegurandose que la direccion sea unica
         #   en la tabla de ruteo
@@ -119,7 +119,7 @@ class Configuracion_Red(Base_Datos):
         self.Lab            = Laboratorio
         self.Ip             = Ip
         self.Grupo          = Grupo
-        self.Coordinador    = 0
+        self.Coordinador    = Coordinador
 
         Host_me = (self.Pro_Id, self.Lab, self.Ip, self.Grupo, self.Coordinador)
 
@@ -236,21 +236,20 @@ class Configuracion_Red(Base_Datos):
         Ruteo = self.Consultar("Ruteo")
         Data = None
 
-        for i in range(len(Ruteo)):
-            for j in range(len(Ruteo[i])):
-                Pro_Id         = Ruteo[i][0]
-                Ip             = Ruteo[i][2]
-                Grup           = Ruteo[i][3]
-                Coord          = Ruteo[i][4]
+        if(Grupo == "Cliente"):
 
-                if((Grupo == "Cliente") and (Grup == "Cliente")):
-                    #   SI EL HOST QUE DESEE CONSULTAR LA
-                    #   RUTA, ES UN CLIENTE SOLO NECESITARA
-                    #   LA IP DEL COORDINADOR CLIENTE
-                    if((Coordinador == 0) and (Coord == 1)):
-                        #   DATA ES IGUAL A LA IP DEL COORDINADOR
-                        Data = Ip
+            for i in range(len(Ruteo)):
+                for j in range(len(Ruteo[i])):
+                    Pro_Id         = Ruteo[i][0]
+                    Ip             = Ruteo[i][2]
+                    Grup           = Ruteo[i][3]
+                    Coord          = Ruteo[i][4]
 
                     if(Coordinador == 1):
-                        Data = Ip
+                        if((Grupo == "Cliente") and (Coord == 1)):
+                            Data = Ip
+                    else:
+                        if((Grup == "Cliente") and (Pro_Id == Process_ID)):
+                            Data = Ip
+
         return Data

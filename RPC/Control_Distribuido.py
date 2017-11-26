@@ -10,7 +10,7 @@ class Control_Distribuido:
 
     def __init__(self, Grupo):
         self.Red = Configuracion_Red(Grupo)
-        print("Constructor CD")
+        print("Constructor Control_Distribuido Listo")
 
     def Replicacion(self, Grupo, Opcion):
         #   Replicacion solo responde a las solicitudes
@@ -57,7 +57,7 @@ class Control_Distribuido:
             #   responde con un OK
             return "OK"
 
-        if(Coordinador == 1)
+        if(Coordinador == 1):
 
             Contador = 0
             while(True):
@@ -83,7 +83,7 @@ class Control_Distribuido:
                         #   TIEMPO LIMITE.
                         pass
 
-                if(Respuesta == "OK")
+                if(Respuesta == "OK"):
                         #   SI LA RESPUESTA FUE OK SE REINICIA EL
                         #   CONTADOR EN CASO DE TENER ALGUN DATO.
                         #   SE REINICIA EL ALGORITMOS DE DETECCION
