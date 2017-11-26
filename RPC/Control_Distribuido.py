@@ -48,9 +48,20 @@ class Control_Distribuido:
         print("Memoria_C")
         return "OK"
 
-    def Detec_Falla(self, Coordinador):
+    def Detec_Falla(self, Coordinador, Grupo):
+        #   HAY DOS CASOS, CLIENTE-COORDINADOR Y
+        #   COORDINADOR-CLIENTE, SOBRE CLIENTE-CLIENTE Y
+        #   SERVIDOR-SERVIDOR
 
-        pass
+        if(Coordinador == 1):
+        #   SIGNIFICA QUE MANDARA MENSAJES A SUS CLIENTES
+            if(Grupo == "Servidor"):
+                #   SERVIDOR-SERVIDOR
+                Servidores = self.Red.Numero_Host("Servidor")
+            else:
+                #   CLIENTE-CLIENTE
+                Clientes = self.Red.Numero_Host("Cliente")
+        else:
 
     def Hello(self, Direccion, Puerto):
 
@@ -74,6 +85,7 @@ class Control_Distribuido:
                     #   SOLICITUD DEL HELLO Y RECIBIR
                     #   RESPUESTA
                     Respuesta = Habla.Transaccion("Hello")
+                    print(Respuesta, Ip_Cliente)
 
                 else:
                     #   SI LA RESPUESTA HA SIDO IGUAL A "OK"

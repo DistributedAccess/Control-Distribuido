@@ -272,3 +272,30 @@ class Configuracion_Red(Base_Datos):
                         if((Grup == "Servidor") and (Pro_Id == Process_ID)):
                             Data = Ip
         return Data
+
+    def Numero_Host(self,Grupo):
+        #   Este metodo regresa el numero de host que hay
+        #   por grupo
+
+        Ruteo = self.Consultar("Ruteo")
+        Data = None
+
+        if(Grupo == "Servidor"):
+
+            for i in range(len(Ruteo)):
+                for j in range(len(Ruteo[i])):
+                    Pro_Id         = Ruteo[i][0]
+                    Grup           = Ruteo[i][3]
+                    if(Grup == "Servidor"):
+                        Data = Pro_Id
+
+        else:
+
+            for i in range(len(Ruteo)):
+                for j in range(len(Ruteo[i])):
+                    Pro_Id         = Ruteo[i][0]
+                    Grup           = Ruteo[i][3]
+                    if(Grup == "Cliente"):
+                        Data = Pro_Id
+
+        return int(float(Data))
