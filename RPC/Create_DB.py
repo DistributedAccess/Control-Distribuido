@@ -83,7 +83,7 @@ class Create_DB:
         self.cursor = self.db.cursor()
 
         #   Creacion de la tabla: TABLA_RUTEO
-        RUTEO = ("""CREATE TABLE IF NOT EXISTS TABLA_RUTEO (
+        QUERY = ("""CREATE TABLE IF NOT EXISTS TABLA_RUTEO (
                     Process_ID int(10) NOT NULL,
                     Laboratorio varchar(16) NOT NULL,
                     IP varchar(16) NOT NULL,
@@ -91,12 +91,12 @@ class Create_DB:
                     Coordinador TINYINT(1) NOT NULL
                     )ENGINE=InnoDB;""")
 
-        self.cursor.execute(RUTEO)
+        self.cursor.execute(QUERY)
         print("Tabla: TABLA_RUTEO creada!")
 
-    def Create_ReplicaTotal(self):
-        #   Este metodo crea la Tabla: TABLA_REPLICA
-        #   de la Base de Datos CONTROL_DISTRIBUIDO.
+    def Create_Usuarios(self):
+        #   Este metodo crea la Tabla: USUARIOS
+        #   de la Base de Datos CONTROL_DISTRIBUIDO
 
         self.db = MySQLdb.connect(user = self.__User, passwd = self.__Password,
                                         host = '127.0.0.1',
@@ -105,18 +105,23 @@ class Create_DB:
         self.cursor = self.db.cursor()
 
         #   Creacion de la tabla: USUARIOS
-        REPLICA = ("""CREATE TABLE IF NOT EXISTS USUARIOS (
-                    Nombre varchar(100) NOT NULL,
-                    LBP varchar(100) NOT NULL,
-                    Laboratorio varchar(16) NOT NULL
+        QUERY = ("""CREATE TABLE IF NOT EXISTS USUARIOS (
+                    ID int(10) NOT NULL,
+                    Nombre varchar(50) NOT NULL,
+                    Password varchar(10) NOT NULL,
+                    Jerarquia varchar(10) NOT NULL,
+                    LBP_1 TEXT(100) NOT NULL,
+                    LBP_2 TEXT(100) NOT NULL,
+                    LBP_3 TEXT(100) NOT NULL,
+                    PRIMARY KEY (ID)
                     )ENGINE=InnoDB;""")
 
-        self.cursor.execute(REPLICA)
+        self.cursor.execute(QUERY)
         print("Tabla: USUARIOS creada!")
 
-    def Create_ReplicaParcial(self):
-        #   Este metodo crea la Tabla: USUARIOS_REPLICA
-        #   de la Base de Datos CONTROL_DISTRIBUIDO.
+    def Create_Bitacora(self):
+        #   Este metodo crea la Tabla: BITACORA
+        #   de la Base de Datos CONTROL_DISTRIBUIDO
 
         self.db = MySQLdb.connect(user = self.__User, passwd = self.__Password,
                                         host = '127.0.0.1',
@@ -124,11 +129,118 @@ class Create_DB:
 
         self.cursor = self.db.cursor()
 
-        #   Creacion de la tabla: USUARIOS_REPLICA
-        REPLICA = ("""CREATE TABLE IF NOT EXISTS USUARIOS_REPLICA (
-                    Nombre varchar(100) NOT NULL,
-                    LBP varchar(100) NOT NULL
+        #   Creacion de la tabla: BITACORA
+        QUERY = ("""CREATE TABLE IF NOT EXISTS BITACORA (
+                    Nombre varchar(50) NOT NULL,
+                    Laboratorio int(10) NOT NULL,
+                    Hora_Entrada DATETIME NOT NULL
                     )ENGINE=InnoDB;""")
 
-        self.cursor.execute(REPLICA)
-        print("Tabla: USUARIOS_REPLICA creada!")
+        self.cursor.execute(QUERY)
+        print("Tabla: BITACORA creada!")
+
+    def Create_Laboratorio(self):
+        #   Este metodo crea la Tabla: LABORATORIO
+        #   de la Base de Datos CONTROL_DISTRIBUIDO
+
+        self.db = MySQLdb.connect(user = self.__User, passwd = self.__Password,
+                                        host = '127.0.0.1',
+                                        db = self.__DB_NAME)
+
+        self.cursor = self.db.cursor()
+
+        #   Creacion de la tabla: LABORATORIO
+        QUERY = ("""CREATE TABLE IF NOT EXISTS LABORATORIO (
+                    ID_Lab int(10) NOT NULL,
+                    Ip varchar(16) NOT NULL,
+                    PRIMARY KEY (ID_Lab)
+                    )ENGINE=InnoDB;""")
+
+        self.cursor.execute(QUERY)
+        print("Tabla: LABORATORIO creada!")
+
+    def Create_Horario(self):
+        #   Este metodo crea la Tabla: HORARIO
+        #   de la Base de Datos CONTROL_DISTRIBUIDO
+
+        self.db = MySQLdb.connect(user = self.__User, passwd = self.__Password,
+                                        host = '127.0.0.1',
+                                        db = self.__DB_NAME)
+
+        self.cursor = self.db.cursor()
+
+        #   Creacion de la tabla: HORARIO
+        QUERY = ("""CREATE TABLE IF NOT EXISTS HORARIO (
+                    Nombre varchar(50) NOT NULL,
+                    Laboratorio int(10) NOT NULL,
+                    Grupo varchar(8) NOT NULL,
+                    Hora TIME NOT NULL,
+                    Dia varchar (8) NOT NULL
+                    )ENGINE=InnoDB;""")
+
+        self.cursor.execute(QUERY)
+        print("Tabla: HORARIO creada!")
+
+    def Create_HorarioBB(self):
+        #   Este metodo crea la Tabla: HORARIOBB
+        #   de la Base de Datos CONTROL_DISTRIBUIDO
+
+        self.db = MySQLdb.connect(user = self.__User, passwd = self.__Password,
+                                        host = '127.0.0.1',
+                                        db = self.__DB_NAME)
+
+        self.cursor = self.db.cursor()
+
+        #   Creacion de la tabla: HORARIOBB
+        QUERY = ("""CREATE TABLE IF NOT EXISTS HORARIOBB (
+                    Nombre varchar(50) NOT NULL,
+                    Grupo varchar(8) NOT NULL,
+                    Hora TIME NOT NULL,
+                    Dia varchar (8) NOT NULL
+                    )ENGINE=InnoDB;""")
+
+        self.cursor.execute(QUERY)
+        print("Tabla: HORARIOBB creada!")
+
+
+    def Create_UsuariosBB(self):
+        #   Este metodo crea la Tabla: USUARIOSBB
+        #   de la Base de Datos CONTROL_DISTRIBUIDO
+
+        self.db = MySQLdb.connect(user = self.__User, passwd = self.__Password,
+                                        host = '127.0.0.1',
+                                        db = self.__DB_NAME)
+
+        self.cursor = self.db.cursor()
+
+        #   Creacion de la tabla: USUARIOSBB
+        QUERY = ("""CREATE TABLE IF NOT EXISTS USUARIOSBB (
+                    Nombre varchar(50) NOT NULL,
+                    Password varchar(10) NOT NULL,
+                    Jerarquia varchar(10) NOT NULL,
+                    LBP_1 TEXT(100) NOT NULL,
+                    LBP_2 TEXT(100) NOT NULL,
+                    LBP_3 TEXT(100) NOT NULL
+                    )ENGINE=InnoDB;""")
+
+        self.cursor.execute(QUERY)
+        print("Tabla: USUARIOSBB creada!")
+
+    def Create_BitacoraBB(self):
+        #   Este metodo crea la Tabla: BITACORA
+        #   de la Base de Datos CONTROL_DISTRIBUIDO
+
+        self.db = MySQLdb.connect(user = self.__User, passwd = self.__Password,
+                                        host = '127.0.0.1',
+                                        db = self.__DB_NAME)
+
+        self.cursor = self.db.cursor()
+
+        #   Creacion de la tabla: BITACORA
+        QUERY = ("""CREATE TABLE IF NOT EXISTS BITACORABB (
+                    Nombre varchar(50) NOT NULL,
+                    Hora_Entrada DATETIME NOT NULL
+                    )ENGINE=InnoDB;""")
+
+        self.cursor.execute(QUERY)
+        print("Tabla: BITACORABB creada!")
