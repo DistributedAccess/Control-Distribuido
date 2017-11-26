@@ -57,11 +57,27 @@ class Control_Distribuido:
         #   SIGNIFICA QUE MANDARA MENSAJES A SUS CLIENTES
             if(Grupo == "Servidor"):
                 #   SERVIDOR-SERVIDOR
-                Servidores = self.Red.Numero_Host("Servidor")
+                Servidores = self.Red.Numero_Host("Servidor")#OBTIENE EL NUMERO DE SERVIDORES
+                for Num_Hilo in range(Servidores):
+                    Direccion = Consultar_Ruta(Num_Hilo+1, "Servidor", 0)
+                    hilo = threading.Thread(target=Hello,args=(Direccion,2018,))
+                    hilo.start()
             else:
                 #   CLIENTE-CLIENTE
-                Clientes = self.Red.Numero_Host("Cliente")
+                Clientes = self.Red.Numero_Host("Cliente")#OBTIENE EL NUMERO DE CLIENTES
+                for Num_Hilo in range(Clientes):
+                    Direccion = Consultar_Ruta(Num_Hilo+1, "Cliente", 0)
+                    hilo = threading.Thread(target=Hello,args=(Direccion,2018,))
+                    hilo.start()
         else:
+            #   MANDARA MENSAJES A SU COORDINADOR
+            if(Grupo == "Servidor"):
+                Direccion = Consultar_Ruta(1,"Servidor",1)
+                Hello(Direccion,2018)
+            else:
+                Direccion = Consultar_Ruta(1,"Cliente",1)
+                Hello(Direccion,2018)
+
 
     def Hello(self, Direccion, Puerto):
 
@@ -110,6 +126,7 @@ class Control_Distribuido:
                     #   EL CONTADOR HA SUPERADO EL LIMITE DE
                     #   TRES DE MODO QUE QUE EL ALGORITMO SALE
                     #   DEL CICLO WHILE
+                    print("ERRORSASO!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                     break
 
     def Transaccion(self, Trans):
