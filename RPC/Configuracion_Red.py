@@ -59,7 +59,7 @@ class Configuracion_Red(Base_Datos):
         #   unico en la Tabla de Ruteo
         Eliminar_Host =  ("DELETE FROM TABLA_RUTEO WHERE IP = '%s'" % self.Ip)
         self.cursor.execute(Eliminar_Host)
-        print("Se ha eliminado la direccion: ", Ip)
+        print("Se ha eliminado la direccion: ", self.Ip)
 
         #   Se agrega el Host a la Tabla de Ruteo
         Agregar_Host = """INSERT INTO TABLA_RUTEO (Process_ID, Laboratorio, Ip, Grupo, Coordinador)
@@ -68,7 +68,7 @@ class Configuracion_Red(Base_Datos):
         self.cursor.fetchall()
         self.cursor.executemany(Agregar_Host,[Host_me])
 
-        print("Se ha agregado la direccion: ", Ip)
+        print("Se ha agregado la direccion: ", self.Ip)
 
         self.db.commit()
         self.cursor.close()

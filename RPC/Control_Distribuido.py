@@ -59,15 +59,15 @@ class Control_Distribuido:
                 #   SERVIDOR-SERVIDOR
                 Servidores = self.Red.Numero_Host("Servidor")#OBTIENE EL NUMERO DE SERVIDORES
                 for Num_Hilo in range(Servidores):
-                    Direccion = Consultar_Ruta(Num_Hilo+1, "Servidor", 0)
-                    hilo = threading.Thread(target=Hello,args=(Direccion,2018,))
+                    Direccion = self.Red.Consultar_Ruta(Num_Hilo+1, "Servidor", 0)
+                    hilo = threading.Thread(target=self.Hello,args=(Direccion,"2020",))
                     hilo.start()
             else:
                 #   CLIENTE-CLIENTE
                 Clientes = self.Red.Numero_Host("Cliente")#OBTIENE EL NUMERO DE CLIENTES
                 for Num_Hilo in range(Clientes):
-                    Direccion = Consultar_Ruta(Num_Hilo+1, "Cliente", 0)
-                    hilo = threading.Thread(target=Hello,args=(Direccion,2018,))
+                    Direccion = self.Red.Consultar_Ruta(Num_Hilo+1, "Cliente", 0)
+                    hilo = threading.Thread(target=self.Hello,args=(Direccion,"2020",))
                     hilo.start()
         else:
             #   MANDARA MENSAJES A SU COORDINADOR
@@ -83,11 +83,12 @@ class Control_Distribuido:
 
         Ip_Cliente = "http://"+Direccion+":"+Puerto
         #   SE ESTABLECE CONEXION CON EL SERVIDOR
+        print(Ip_Cliente)
         Habla = xmlrpclib.ServerProxy(Ip_Cliente)
-
+        print("Conexion")
         Contador = 0    # EL HELLO X4
         while(True):
-
+            print("while")
             Respuesta = None
             Inicio = time.time()
             Fin = None
@@ -95,11 +96,13 @@ class Control_Distribuido:
             while(Fin <= 5):
                 Fin = time.time()
                 Fin = Fin-Inicio
+                print("while chiquito")
 
                 if(Respuesta != "OK"):
                     #   ESTE IF SE ENCARGA DE ENVIAR LA
                     #   SOLICITUD DEL HELLO Y RECIBIR
                     #   RESPUESTA
+                    print("Respuestita")
                     Respuesta = Habla.Transaccion("Hello")
                     print(Respuesta, Ip_Cliente)
 
