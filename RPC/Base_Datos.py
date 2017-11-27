@@ -1,9 +1,14 @@
 from Create_DB import *
-import commands
 import MySQLdb
 
-    #   Esta clase se dedica exclusivamente en la...
+"""     Esta clase se conecta a la Base de Datos CONTROL_DISTRIBUIDO
+        en caso de no existir la clase crea la Base de Datos y sus
+        respectivas tablas para el uso en Servidores o Clientes.
 
+        Esta clase tiene relacion directa con todas las tablas de la
+        Base de Datos por medio de los metodos Consultar() y Actualizar().
+
+"""
 class Base_Datos:
 
     #   Variables privadas
@@ -148,116 +153,232 @@ class Base_Datos:
         self.db = MySQLdb.connect(user = self.__User, passwd = self.__Password,
                                       host = '127.0.0.1',
                                       db = 'CONTROL_DISTRIBUIDO')
-        print("Conexion establecida a la Base de Datos")
 
         self.cursor = self.db.cursor()
 
-        if (Grupo == "Servidor"):
-            if (Opcion == "Ruteo"):
-                Eliminar_Registros = """DELETE FROM TABLA_RUTEO """
-                self.cursor.execute(Eliminar_Registros)
 
-                Nueva_Tabla = """INSERT INTO TABLA_RUTEO (Process_ID,
-                                    Laboratorio, Ip, Grupo, Coordinador)
-                                    VALUES(%s, %s, %s, %s, %s)"""
+        if (Opcion == "Ruteo"):
+            Eliminar_Registros = """DELETE FROM TABLA_RUTEO """
+            self.cursor.execute(Eliminar_Registros)
 
-                self.Pro_Id         = None
-                self.Lab            = None
-                self.Ip             = None
-                self.Grupo          = None
-                self.Coordinador    = None
+            Nueva_Tabla = """INSERT INTO TABLA_RUTEO (Process_ID,
+                                Laboratorio, Ip, Grupo, Coordinador)
+                                VALUES(%s, %s, %s, %s, %s)"""
 
-                Host_me             = None
+            self.Pro_Id         = None
+            self.Lab            = None
+            self.Ip             = None
+            self.Grupo          = None
+            self.Coordinador    = None
 
-                for i in range(len(Data)):
-                    for j in range(len(Data[i])):
-                        self.Pro_Id         = Data[i][0]
-                        self.Lab            = Data[i][1]
-                        self.Ip             = Data[i][2]
-                        self.Grupo          = Data[i][3]
-                        self.Coordinador    = Data[i][4]
+            Host_me             = None
 
-                    Host_me = (self.Pro_Id, self.Lab, self.Ip, self.Grupo, self.Coordinador)
-                    self.cursor.executemany(Nueva_Tabla,[Host_me])
+            for i in range(len(Data)):
+                for j in range(len(Data[i])):
+                    self.Pro_Id         = Data[i][0]
+                    self.Lab            = Data[i][1]
+                    self.Ip             = Data[i][2]
+                    self.Grupo          = Data[i][3]
+                    self.Coordinador    = Data[i][4]
 
-                self.db.commit()
-                self.cursor.close()
+                Host_me = (self.Pro_Id, self.Lab, self.Ip, self.Grupo, self.Coordinador)
+                self.cursor.executemany(Nueva_Tabla,[Host_me])
 
-            elif (Opcion == "Total"):
-                Eliminar_Registros = """DELETE FROM USUARIOS """
-                self.cursor.execute(Eliminar_Registros)
+            self.db.commit()
+            self.cursor.close()
 
-                Nueva_Tabla = """INSERT INTO USUARIOS (Nombre, LBP, Laboratorio)
-                                    VALUES(%s, %s, %s)"""
+        elif (Opcion == "Usuarios"):
+            Eliminar_Registros = """DELETE FROM USUARIOS """
+            self.cursor.execute(Eliminar_Registros)
 
-                self.Nom            = None
-                self.LBP            = None
-                self.Lab            = None
+            Nueva_Tabla = """INSERT INTO USUARIOS (ID, Nombre, Password,
+                                Jerarquia, LBP_1, LBP_2, LBP_3)
+                                VALUES(%s, %s, %s, %s, %s, %s, %s)"""
 
-                Host_me             = None
+            Id                  = None
+            Nombre              = None
+            Password            = None
+            Jerarquia           = None
+            LBP_1               = None
+            LBP_2               = None
+            LBP_3               = None
 
-                for i in range(len(Data)):
-                    for j in range(len(Data[i])):
-                        self.Nom            = Data[i][0]
-                        self.LBP            = Data[i][1]
-                        self.Lab            = Data[i][2]
+            Host_me             = None
 
-                    Host_me = (self.Nom, self.LBP, self.Lab)
-                    self.cursor.executemany(Nueva_Tabla,[Host_me])
+            for i in range(len(Data)):
+                for j in range(len(Data[i])):
+                    Id                  = Data[i][0]
+                    Nombre              = Data[i][1]
+                    Password            = Data[i][2]
+                    Jerarquia           = Data[i][3]
+                    LBP_1               = Data[i][4]
+                    LBP_2               = Data[i][5]
+                    LBP_3               = Data[i][6]
 
-                self.db.commit()
-                self.cursor.close()
+                Host_me = (Id, Nombre, Password, Jerarquia, LBP_1, LBP_2, LBP_3)
+                self.cursor.executemany(Nueva_Tabla,[Host_me])
 
-        elif (Grupo == "Cliente"):
-            if (Opcion == "Ruteo"):
-                Eliminar_Registros = """DELETE FROM TABLA_RUTEO """
-                self.cursor.execute(Eliminar_Registros)
+            self.db.commit()
+            self.cursor.close()
 
-                Nueva_Tabla = """INSERT INTO TABLA_RUTEO (Process_ID,
-                                    Laboratorio, Ip, Grupo, Coordinador)
-                                    VALUES(%s, %s, %s, %s, %s)"""
+        elif (Opcion == "Bitacora"):
+            Eliminar_Registros = """DELETE FROM BITACORA """
+            self.cursor.execute(Eliminar_Registros)
 
-                self.Pro_Id         = None
-                self.Lab            = None
-                self.Ip             = None
-                self.Grupo          = None
-                self.Coordinador    = None
+            Nueva_Tabla = """INSERT INTO BITACORA (Nombre, Laboratorio,
+                                Hora_Entrada)
+                                VALUES(%s, %s, %s)"""
 
-                Host_me             = None
+            Nombre              = None
+            Laboratorio         = None
+            Hora_Entrada        = None
 
-                for i in range(len(Data)):
-                    for j in range(len(Data[i])):
-                        self.Pro_Id         = Data[i][0]
-                        self.Lab            = Data[i][1]
-                        self.Ip             = Data[i][2]
-                        self.Grupo          = Data[i][3]
-                        self.Coordinador    = Data[i][4]
+            Host_me             = None
 
-                    Host_me = (self.Pro_Id, self.Lab, self.Ip, self.Grupo, self.Coordinador)
-                    self.cursor.executemany(Nueva_Tabla,[Host_me])
+            for i in range(len(Data)):
+                for j in range(len(Data[i])):
+                    Nombre              = Data[i][0]
+                    Laboratorio         = Data[i][1]
+                    Hora_Entrada        = Data[i][2]
 
-                self.db.commit()
-                self.cursor.close()
+                Host_me = (Nombre, Laboratorio, Hora_Entrada)
+                self.cursor.executemany(Nueva_Tabla,[Host_me])
 
-            elif (Opcion == "Replica"):
-                Eliminar_Registros = """DELETE FROM USUARIOS_REPLICA """
-                self.cursor.execute(Eliminar_Registros)
+            self.db.commit()
+            self.cursor.close()
 
-                Nueva_Tabla = """INSERT INTO USUARIOS_REPLICA (Nombre, LBP)
-                                    VALUES(%s, %s)"""
+        elif (Opcion == "Laboratorio"):
+            Eliminar_Registros = """DELETE FROM LABORATORIO """
+            self.cursor.execute(Eliminar_Registros)
 
-                self.Nom            = None
-                self.LBP            = None
+            Nueva_Tabla = """INSERT INTO LABORATORIO (ID_Lab, Ip)
+                                VALUES(%s, %s)"""
 
-                Host_me             = None
+            ID_Lab              = None
+            Ip                  = None
 
-                for i in range(len(Data)):
-                    for j in range(len(Data[i])):
-                        self.Nom            = Data[i][0]
-                        self.LBP            = Data[i][1]
+            Host_me             = None
 
-                    Host_me = (self.Nom, self.LBP)
-                    self.cursor.executemany(Nueva_Tabla,[Host_me])
+            for i in range(len(Data)):
+                for j in range(len(Data[i])):
+                    ID_Lab              = Data[i][0]
+                    Ip                  = Data[i][1]
 
-                self.db.commit()
-                self.cursor.close()
+                Host_me = (ID_Lab, Ip)
+                self.cursor.executemany(Nueva_Tabla,[Host_me])
+
+            self.db.commit()
+            self.cursor.close()
+
+        elif (Opcion == "Horario"):
+            Eliminar_Registros = """DELETE FROM HORARIO """
+            self.cursor.execute(Eliminar_Registros)
+
+            Nueva_Tabla = """INSERT INTO HORARIO (Nombre, Laboratorio,
+                                Grupo, Hora, Dia)
+                                VALUES(%s, %s, %s, %s, %s)"""
+
+            Nombre              = None
+            Laboratorio         = None
+            Grupo               = None
+            Hora                = None
+            Dia                 = None
+
+            Host_me             = None
+
+            for i in range(len(Data)):
+                for j in range(len(Data[i])):
+                    Nombre              = Data[i][0]
+                    Laboratorio         = Data[i][1]
+                    Grupo               = Data[i][2]
+                    Hora                = Data[i][3]
+                    Dia                 = Data[i][4]
+
+
+                Host_me = (Nombre, Laboratorio, Grupo, Hora, Dia)
+                self.cursor.executemany(Nueva_Tabla,[Host_me])
+
+            self.db.commit()
+            self.cursor.close()
+
+        elif (Opcion == "HorarioBB"):
+            Eliminar_Registros = """DELETE FROM HORARIOBB """
+            self.cursor.execute(Eliminar_Registros)
+
+            Nueva_Tabla = """INSERT INTO HORARIOBB (Nombre, Grupo, Hora, Dia)
+                                VALUES(%s, %s, %s, %s)"""
+
+            Nombre              = None
+            Grupo               = None
+            Hora                = None
+            Dia                 = None
+
+            Host_me             = None
+
+            for i in range(len(Data)):
+                for j in range(len(Data[i])):
+                    Nombre              = Data[i][0]
+                    Grupo               = Data[i][1]
+                    Hora                = Data[i][2]
+                    Dia                 = Data[i][3]
+
+                Host_me = (Nombre, Grupo, Hora, Dia)
+                self.cursor.executemany(Nueva_Tabla,[Host_me])
+
+            self.db.commit()
+            self.cursor.close()
+
+        elif (Opcion == "UsuariosBB"):
+            Eliminar_Registros = """DELETE FROM USUARIOSBB """
+            self.cursor.execute(Eliminar_Registros)
+
+            Nueva_Tabla = """INSERT INTO USUARIOSBB (Nombre, Password,
+                                Jerarquia, LBP_1, LBP_2, LBP_3)
+                                VALUES(%s, %s, %s, %s, %s, %s)"""
+
+            Nombre              = None
+            Password            = None
+            Jerarquia           = None
+            LBP_1               = None
+            LBP_2               = None
+            LBP_3               = None
+
+            Host_me             = None
+
+            for i in range(len(Data)):
+                for j in range(len(Data[i])):
+                    Nombre              = Data[i][0]
+                    Password            = Data[i][1]
+                    Jerarquia           = Data[i][2]
+                    LBP_1               = Data[i][3]
+                    LBP_2               = Data[i][4]
+                    LBP_3               = Data[i][5]
+
+                Host_me = (Nombre, Password, Jerarquia, LBP_1, LBP_2, LBP_3)
+                self.cursor.executemany(Nueva_Tabla,[Host_me])
+
+            self.db.commit()
+            self.cursor.close()
+
+        elif (Opcion == "BitacoraBB"):
+            Eliminar_Registros = """DELETE FROM BITACORABB """
+            self.cursor.execute(Eliminar_Registros)
+
+            Nueva_Tabla = """INSERT INTO BITACORABB (Nombre, Laboratorio)
+                                VALUES(%s, %s)"""
+
+            Nombre              = None
+            Hora_Entrada        = None
+
+            Host_me             = None
+
+            for i in range(len(Data)):
+                for j in range(len(Data[i])):
+                    Nombre              = Data[i][0]
+                    Hora_Entrada        = Data[i][1]
+
+                Host_me = (Nombre, Hora_Entrada)
+                self.cursor.executemany(Nueva_Tabla,[Host_me])
+
+            self.db.commit()
+            self.cursor.close()

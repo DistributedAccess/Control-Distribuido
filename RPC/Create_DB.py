@@ -1,39 +1,103 @@
 import MySQLdb
-#   Esta clase se dedica a crear la base de datos y las tablas
-#   a usar en los servidores y en los procesos. Esta clase se
-#   ejecutara una sola vez solo en la instalacion de nuevos nodos.
-#
-#   La Base de Datos a crear tiene las siguientes caracteristicas:
-#
-#   Base de Datos:  CONTROL_DISTRIBUIDO
-#   Tabla:          TABLA_RUTEO
-#                   TABLA_REPLICADA
-#
-#   TABLA_RUTEO
-#   +------------+------------------+------+-----+---------+----------------+
-#   | Field      | Type             | Null | Key | Default | Extra          |
-#   +------------+------------------+------+-----+---------+----------------+
-#   | Process_ID | int(10)          | NO   |     | NULL    |                |
-#   | IP         | varchar(16)      | NO   |     | NULL    |                |
-#   | Grupo      | varchar(10)      | NO   |     | NULL    |                |
-#   | Coordinador| TINYINT(1)       | NO   |     | NULL    |                |
-#   | Busy       | TINYINT(1)       | NO   |     | NULL    |                |
-#   +------------+------------------+------+-----+---------+----------------+
-#
-#   ID: Identificador de la llave primaria
-#   Process_ID: Identificador del proceso Cliete o Servidor
-#   IP: Direccion Ip del proceso Cliente o Servidor
-#   Grupo: Clasifica a las direcciones Ip por Cliente o Servidor
-#   Coordinador: Indica que Cliente y Servidor son coordinadores
-#   Busy: Indica el estado ocupado/desocupado del Host
-#
-#
-#   TABLA_REPLICADA
-#   +------------+------------------+------+-----+---------+----------------+
-#   | Field      | Type             | Null | Key | Default | Extra          |
-#   +------------+------------------+------+-----+---------+----------------+
-#
-#
+"""   Esta clase se dedica a crear la base de datos y las tablas
+      a usar en los servidores y en los procesos. Esta clase se
+      ejecutara una sola vez solo en la instalacion de nuevos nodos.
+
+      La Base de Datos a crear tiene las siguientes caracteristicas:
+
+      Base de Datos:  CONTROL_DISTRIBUIDO
+
+      Tablas:         TABLA_RUTEO
+                      USUARIOS
+                      BITACORA
+                      LABORATORIO
+                      HORARIO
+                      HORARIOBB
+                      USUARIOSBB
+                      BITACORABB
+
+      TABLA_RUTEO
+      +------------+------------------+------+-----+---------+----------------+
+      | Field      | Type             | Null | Key | Default | Extra          |
+      +------------+------------------+------+-----+---------+----------------+
+      | Process_ID | int(10)          | NO   |     | NULL    |                |
+      | Laboratorio| varchar(16)      | NO   |     | NULL    |                |
+      | IP         | varchar(16)      | NO   |     | NULL    |                |
+      | Grupo      | varchar(10)      | NO   |     | NULL    |                |
+      | Coordinador| TINYINT(1)       | NO   |     | NULL    |                |
+      +------------+------------------+------+-----+---------+----------------+
+
+      USUARIOS
+      +-----------+-------------+------+-----+---------+-------+
+      | Field     | Type        | Null | Key | Default | Extra |
+      +-----------+-------------+------+-----+---------+-------+
+      | ID        | int(10)     | NO   | PRI | NULL    |       |
+      | Nombre    | varchar(50) | NO   |     | NULL    |       |
+      | Password  | varchar(10) | NO   |     | NULL    |       |
+      | Jerarquia | varchar(10) | NO   |     | NULL    |       |
+      | LBP_1     | tinytext    | NO   |     | NULL    |       |
+      | LBP_2     | tinytext    | NO   |     | NULL    |       |
+      | LBP_3     | tinytext    | NO   |     | NULL    |       |
+      +-----------+-------------+------+-----+---------+-------+
+
+      BITACORA
+      +--------------+-------------+------+-----+---------+-------+
+      | Field        | Type        | Null | Key | Default | Extra |
+      +--------------+-------------+------+-----+---------+-------+
+      | Nombre       | varchar(50) | NO   |     | NULL    |       |
+      | Laboratorio  | int(10)     | NO   |     | NULL    |       |
+      | Hora_Entrada | datetime    | NO   |     | NULL    |       |
+      +--------------+-------------+------+-----+---------+-------+
+
+      LABORATORIO
+      +--------+-------------+------+-----+---------+-------+
+      | Field  | Type        | Null | Key | Default | Extra |
+      +--------+-------------+------+-----+---------+-------+
+      | ID_Lab | int(10)     | NO   | PRI | NULL    |       |
+      | Ip     | varchar(16) | NO   |     | NULL    |       |
+      +--------+-------------+------+-----+---------+-------+
+
+      HORARIO
+      +-------------+-------------+------+-----+---------+-------+
+      | Field       | Type        | Null | Key | Default | Extra |
+      +-------------+-------------+------+-----+---------+-------+
+      | Nombre      | varchar(50) | NO   |     | NULL    |       |
+      | Laboratorio | int(10)     | NO   |     | NULL    |       |
+      | Grupo       | varchar(8)  | NO   |     | NULL    |       |
+      | Hora        | time        | NO   |     | NULL    |       |
+      | Dia         | varchar(8)  | NO   |     | NULL    |       |
+      +-------------+-------------+------+-----+---------+-------+
+
+      HORARIOBB
+      +--------+-------------+------+-----+---------+-------+
+      | Field  | Type        | Null | Key | Default | Extra |
+      +--------+-------------+------+-----+---------+-------+
+      | Nombre | varchar(50) | NO   |     | NULL    |       |
+      | Grupo  | varchar(8)  | NO   |     | NULL    |       |
+      | Hora   | time        | NO   |     | NULL    |       |
+      | Dia    | varchar(8)  | NO   |     | NULL    |       |
+      +--------+-------------+------+-----+---------+-------+
+
+      UsuariosBB
+      +-----------+-------------+------+-----+---------+-------+
+      | Field     | Type        | Null | Key | Default | Extra |
+      +-----------+-------------+------+-----+---------+-------+
+      | Nombre    | varchar(50) | NO   |     | NULL    |       |
+      | Password  | varchar(10) | NO   |     | NULL    |       |
+      | Jerarquia | varchar(10) | NO   |     | NULL    |       |
+      | LBP_1     | tinytext    | NO   |     | NULL    |       |
+      | LBP_2     | tinytext    | NO   |     | NULL    |       |
+      | LBP_3     | tinytext    | NO   |     | NULL    |       |
+      +-----------+-------------+------+-----+---------+-------+
+
+      BITACORABB
+      +--------------+-------------+------+-----+---------+-------+
+      | Field        | Type        | Null | Key | Default | Extra |
+      +--------------+-------------+------+-----+---------+-------+
+      | Nombre       | varchar(50) | NO   |     | NULL    |       |
+      | Hora_Entrada | datetime    | NO   |     | NULL    |       |
+      +--------------+-------------+------+-----+---------+-------+
+"""
 
 class Create_DB:
 

@@ -1,26 +1,23 @@
 from Base_Datos import *
+import commands
 
-    #   Esta clase se dedica exclusivamente en la configuracion
-    #   de los Hosts en la red de Control_Distribuido. Los Hosts
-    #   ya sean Cliete o Servidor pueden hacer uso de los metodos
-    #   de esta clase, las reglas de su respectivo uso estan
-    #   determinadas por el tipo de objeto al que correspondan.
-    #
-    #   La configuracion que realiza esta clase esta relacionada
-    #   con la tabla de ruteo de los Hosts asi como el acceso a
-    #   la Base de Datos.
-    #
-    #   Cabe aclarar que la clase debera acceder a una Base de
-    #   Datos con las siguientes caracteristicas:
-    #
-    #   Base de Datos:  CONTROL_DISTRIBUIDO
-    #   Tabla:          TABLA_RUTEO
-    #
-    #   Si no se cuenta con tal Base de Datos se debera ejecutar
-    #   el programa Create_DB.py una vez, para hacer dichas
-    #   configuraciones, la creacion de la base de datos puede ser
-    #   manual o puede hacerse desde el constructor __init__.
+"""     Esta clase se dedica exclusivamente en la configuracion
+        de los Hosts en la red de Control_Distribuido. Los Hosts
+        ya sean Cliete o Servidor pueden hacer uso de los metodos
+        de esta clase, las reglas de su respectivo uso estan
+        determinadas por el tipo de objeto al que correspondan.
 
+        La configuracion que realiza esta clase esta relacionada
+        con la tabla de ruteo de los Hosts asi como el acceso a
+        la Base de Datos.
+
+        Cabe aclarar que la clase debera acceder a una Base de
+        Datos con las siguientes caracteristicas:
+
+        Base de Datos:  CONTROL_DISTRIBUIDO
+        Tabla:          TABLA_RUTEO
+        
+"""
 class Configuracion_Red(Base_Datos):
 
     #   Variables privadas (NO SON HEREDABLES)
