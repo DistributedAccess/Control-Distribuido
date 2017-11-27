@@ -80,15 +80,20 @@ class Control_Distribuido:
 
 
     def Hello(self, Direccion, Puerto):
+        #   La funcion Hello representa la estructura del algoritmo
+        #   de deteccion de errores, el cual se basa en mandar un
+        #   mensaje hello al host destino y esperar respuesta de
+        #   parte de este, en caso de no haberla dentro del limite
+        #   de tiempo se notificara un error hasta salir de esta
+        #   funcion
 
         Ip_Cliente = "http://"+Direccion+":"+Puerto
-        #   SE ESTABLECE CONEXION CON EL SERVIDOR
-        print(Ip_Cliente)
         Habla = xmlrpclib.ServerProxy(Ip_Cliente)
-        print("Conexion")
+
         Contador = 0    # EL HELLO X4
+
         while(True):
-            print("while")
+
             Respuesta = None
             Inicio = time.time()
             Fin = None
@@ -96,13 +101,12 @@ class Control_Distribuido:
             while(Fin <= 5):
                 Fin = time.time()
                 Fin = Fin-Inicio
-                print("while chiquito")
 
                 if(Respuesta != "OK"):
                     #   ESTE IF SE ENCARGA DE ENVIAR LA
                     #   SOLICITUD DEL HELLO Y RECIBIR
                     #   RESPUESTA
-                    print("Respuestita")
+
                     Respuesta = Habla.Transaccion("Hello")
                     print(Respuesta, Ip_Cliente)
 
@@ -120,12 +124,13 @@ class Control_Distribuido:
                     #   DE ERRORES
                 Contador = 0
 
-            if(Contador < 3):
+            elif:
                     #   EN CASO DE NO HABER OBTENIDO RESPUESTA
                     #   SE INCREMENTA EN 1 AL CONTADOR Y EL
                     #   PROCESO VUELVE A COMENZAR
                     Contador = Contador + 1
-            else:
+
+            if(Contador > 3):
                     #   EL CONTADOR HA SUPERADO EL LIMITE DE
                     #   TRES DE MODO QUE QUE EL ALGORITMO SALE
                     #   DEL CICLO WHILE

@@ -16,7 +16,7 @@ import commands
 
         Base de Datos:  CONTROL_DISTRIBUIDO
         Tabla:          TABLA_RUTEO
-        
+
 """
 class Configuracion_Red(Base_Datos):
 
@@ -271,7 +271,7 @@ class Configuracion_Red(Base_Datos):
         return Data
 
     def Numero_Host(self,Grupo):
-        #   Este metodo regresa el numero de host que hay
+        #   Este metodo regresa el numero de Hosts que hay
         #   por grupo
 
         Ruteo = self.Consultar("Ruteo")
