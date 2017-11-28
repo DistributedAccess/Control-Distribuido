@@ -33,7 +33,7 @@ class Control_Distribuido:
 
         return Replica
 
-    def Actualizar(self, Grupo, Opcion, Data):
+    def Actualizare(self, Grupo, Opcion, Data):
         #   Actualizar recibe las tablas de las
         #   bases de datos por parte de Replicacion()
         #   y de Ingresar()
