@@ -10,7 +10,7 @@ import time
 HOST = Ip_Host.Ip_Host()
 Red = Configuracion_Red("Servidor")       #Configuracion de la Red y DB
 Red.Agregar_Propio("Servidor","LOCAL",1)    #Agregar host propio a la DB
-Escucha = SimpleXMLRPCServer((HOST,2020)) #Configuracion del Objeto RPC
+Escucha = SimpleXMLRPCServer((HOST,2027)) #Configuracion del Objeto RPC
 Server = Servidor_Distribuido()           #Configuracion del Objeto distribuido
 
 

@@ -12,7 +12,7 @@ class Control_Distribuido:
 
     def __init__(self, Grupo):
         self.Red = Configuracion_Red(Grupo)
-        print("Constructor Control_Distribuido Listo")
+        print("Constructor Control_Distribuido Listo!")
 
     def Replicacion(self, Grupo, Opcion):
         #   Replicacion solo responde a las solicitudes

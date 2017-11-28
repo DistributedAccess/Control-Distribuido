@@ -29,17 +29,23 @@ class Servidor_Distribuido(Control_Distribuido):
 
             #   ENVIA A TODOS LOS HOST SERVIDOR LA NUEVA TABLA DE RUTEO
             Servidores = self.Red.Numero_Host("Servidor")#OBTIENE EL NUMERO DE SERVIDORES
-            for Nu in range(Servidores):
-                Direccion = self.Red.Consultar_Ruta(Nu+1, "Servidor", 0)
-                Ip_Cliente = "http://"+Direccion+":"+2020
-                Habla = xmlrpclib.ServerProxy(Ip_Cliente)
-                Habla.Actualizar("Servidor","Ruteo",Replica)
+            print "SERVIDORES: ", Servidores
+            if(Servidores > 1):
+                for Nu in range(2, Servidores+1):
+                    Direccion = self.Red.Consultar_Ruta(Nu, "Servidor", 0)
+                    Ip_Cliente = "http://"+Direccion+":"+"2027"
+                    Habla = xmlrpclib.ServerProxy(Ip_Cliente)
+                    Habla.Actualizar("Servidor","Ruteo",Replica)
+                    print ("Se ha actualizado: ", Direccion)
             #   ENVIA A TODOS LOS HOST CLIENTE LA NUEVA TABLA DE RUTEO
             Clientes = self.Red.Numero_Host("Cliente")#OBTIENE EL NUMERO DE CLIENTES
-            for Nu in range(Clientes):
-                Direccion = self.Red.Consultar_Ruta(Nu+1, "Cliente", 0)
-                Ip_Cliente = "http://"+Direccion+":"+2020
-                Habla = xmlrpclib.ServerProxy(Ip_Cliente)
-                Habla.Actualizar("Cliente","Ruteo",Replica)
+            print "CLIENTES: ", Clientes
+            if(Clientes > 1):
+                for Nu in range(2, Clientes+1):
+                    Direccion = self.Red.Consultar_Ruta(Nu, "Cliente", 0)
+                    Ip_Cliente = "http://"+Direccion+":"+"2027"
+                    Habla = xmlrpclib.ServerProxy(Ip_Cliente)
+                    Habla.Actualizar("Cliente","Ruteo",Replica)
+                    print("Se ha actualizado: ", Direccion)
 
         return Replica #ENVIA LA REPLICA AL HOST QUE RECIEN INGRESO
