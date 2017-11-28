@@ -1,5 +1,7 @@
 from Configuracion_Red import *
 import threading
+import xmlrpclib
+import Queue
 import time
 
 import xmlrpclib
@@ -34,6 +36,7 @@ class Control_Distribuido:
     def Actualizar(self, Grupo, Opcion, Data):
         #   Actualizar recibe las tablas de las
         #   bases de datos por parte de Replicacion()
+        #   y de Ingresar()
         self.Red.Actualizar(Grupo,Opcion,Data)
 
     def Eleccion(self):
@@ -79,63 +82,60 @@ class Control_Distribuido:
                 Hello(Direccion,2018)
 
 
-    def Hello(self, Direccion, Puerto):
-        #   La funcion Hello representa la estructura del algoritmo
-        #   de deteccion de errores, el cual se basa en mandar un
-        #   mensaje hello al host destino y esperar respuesta de
-        #   parte de este, en caso de no haberla dentro del limite
-        #   de tiempo se notificara un error hasta salir de esta
-        #   funcion
+    def Hello(self, Direccion, Puerto,  Periodo):
+        #   Este metdo se encarga de mandar un mensaje de
+        #   reconocimiento hello al host destino, si dicho
+        #   host se encuentra conectado enviara un OK
+        #   de otro modo no mandara nada y el algoritmo
+        #   madara un mensaje de ERROR.
 
         Ip_Cliente = "http://"+Direccion+":"+Puerto
         Habla = xmlrpclib.ServerProxy(Ip_Cliente)
 
-        Contador = 0    # EL HELLO X4
+        cola = Queue.Queue()
+        Contador = 0
 
-        while(True):
+        def Hello2():
 
-            Respuesta = None
-            Inicio = time.time()
-            Fin = None
-
-            while(Fin <= 5):
-                Fin = time.time()
-                Fin = Fin-Inicio
-
-                if(Respuesta != "OK"):
-                    #   ESTE IF SE ENCARGA DE ENVIAR LA
-                    #   SOLICITUD DEL HELLO Y RECIBIR
-                    #   RESPUESTA
-
+            def Envia():
+                try:
                     Respuesta = Habla.Transaccion("Hello")
-                    print(Respuesta, Ip_Cliente)
+                    cola.put(Respuesta)
+                except Exception as error:
+                    cola.put("ERROR")
 
-                else:
-                    #   SI LA RESPUESTA HA SIDO IGUAL A "OK"
-                    #   YA NO SE VULEVE A HACER UNA SOLICITUD
-                    #   POR LO TANTO SE ESPERA A QUE TERMINE EL
-                    #   TIEMPO LIMITE.
-                    pass
+            def Tiempo():
+                time.sleep(Periodo - 0.2)
 
-            if(Respuesta == "OK"):
-                    #   SI LA RESPUESTA FUE OK SE REINICIA EL
-                    #   CONTADOR EN CASO DE TENER ALGUN DATO.
-                    #   SE REINICIA EL ALGORITMOS DE DETECCION
-                    #   DE ERRORES
+            Hilo1 = threading.Thread(target=Envia)
+            Hilo2 = threading.Thread(target=Tiempo)
+
+            #   El Hilo1 se configura como demonio, si el Hilo2 termina
+            #   su ejecucion el Hilo1 se cerrara sin importar si Este
+            #   sigue ejecutandose.
+            Hilo1.setDaemon(True)
+
+            Hilo1.start()
+            Hilo2.start()
+
+            time.sleep(Periodo)
+            return cola.get()
+
+        y = None
+        while(Contador < 3):
+            #   Este ciclo se encarga de enviar el mensaje Hello
+            #   periodicamente hasta que haya una desconexion o un
+            #   error, en caso de haberlo, el mensaje se enviara 3
+            #   veces mas y en caso de no responder a dichos mensajes
+            #   el programa retorna un mensaje de ERROR
+            y = Hello2()
+
+            if(y == "ERROR"):
+                Contador = Contador + 1
+            else:
                 Contador = 0
 
-            elif:
-                    #   EN CASO DE NO HABER OBTENIDO RESPUESTA
-                    #   SE INCREMENTA EN 1 AL CONTADOR Y EL
-                    #   PROCESO VUELVE A COMENZAR
-                    Contador = Contador + 1
-
-            if(Contador > 3):
-                    #   EL CONTADOR HA SUPERADO EL LIMITE DE
-                    #   TRES DE MODO QUE QUE EL ALGORITMO SALE
-                    #   DEL CICLO WHILE
-                    print("ERRORSASO!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-                    break
+        return y
 
     def Transaccion(self, Trans):
         #   FUNCION PARA RESPONDER A CUALQUIER TIPO DE MENSAJES
