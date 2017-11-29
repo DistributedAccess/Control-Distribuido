@@ -172,11 +172,11 @@ class Create_DB:
         QUERY = ("""CREATE TABLE IF NOT EXISTS USUARIOS (
                     ID int(10) NOT NULL,
                     Nombre varchar(50) NOT NULL,
-                    Password varchar(10) NOT NULL,
-                    Jerarquia varchar(10) NOT NULL,
-                    LBP_1 TEXT(100) NOT NULL,
-                    LBP_2 TEXT(100) NOT NULL,
-                    LBP_3 TEXT(100) NOT NULL,
+                    Password varchar(10) NULL,
+                    Jerarquia varchar(10) NULL,
+                    LBP_1 TEXT(100) NULL,
+                    LBP_2 TEXT(100) NULL,
+                    LBP_3 TEXT(100) NULL,
                     PRIMARY KEY (ID)
                     )ENGINE=InnoDB;""")
 

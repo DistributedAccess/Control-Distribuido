@@ -4,8 +4,6 @@ import xmlrpclib
 import Queue
 import time
 
-import xmlrpclib
-
 class Control_Distribuido:
 
     Red      = None      #   Objeto de Configuracion_Red
