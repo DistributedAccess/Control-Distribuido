@@ -31,9 +31,7 @@ class Procesamiento():
         lbp=local_binary_pattern(arrayima[:,:,2], n_points, radius, METHOD)
 
         n_bins = int (lbp.max()-1)
-        #print n_bins
         his, _ = np.histogram(lbp, normed=True, bins=n_bins, range=(0, n_bins))
-        #print his
 
         return his
 

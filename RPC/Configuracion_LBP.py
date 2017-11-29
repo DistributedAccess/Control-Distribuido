@@ -10,15 +10,6 @@ class Configuracion_LBP():
     db          =   None          #   Objeto para la Base de Datos
     cursor      =   None          #   Objeto para la Base de Datos
 
-    def __init__(self):
-
-        self.db = MySQLdb.connect(user = self.__User, passwd = self.__Password,
-                                    host = '127.0.0.1',
-                                    db = 'CONTROL_DISTRIBUIDO')
-        print("Conexion a la Base de Datos: CONTROL_DISTRIBUIDO")
-        print("Constructor de Configuracion_Red Listo!")
-
-
     def Asignar_LBP(self, Id_Usuario, Data1, Data2, Data3):
         """ Este metdo ingresa el LBP_1, LBP_2 y LBP_3 de los usuarios
             por medio del ID de la tabla USUARIO.
