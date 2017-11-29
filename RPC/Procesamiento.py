@@ -13,7 +13,7 @@ import math
 
 class Procesamiento():
 
-    def LBP(Imagen):
+    def LBP(self, Imagen):
         """ Este metodo obtiene el Local Binary Pattern (LBP) de la Imagen
             de entrada y retorna su vector.
         """

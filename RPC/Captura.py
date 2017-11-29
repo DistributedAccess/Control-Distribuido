@@ -13,9 +13,9 @@ def Ingresar_al_Sistema(Boleta):
     Fotos()
 
     for i in range(3):
-        LBPs[i] = LBP('Imagen%s.jpg' % (i+1))
+        LBPs[i] = Proceso.LBP(('Imagen%s.jpg' % (i+1)))
 
-    Configu.Asignar_LBP(Boleta, LBPs[0], LBP[1], LBP[2])
+    Configu.Asignar_LBP(Boleta, LBPs[0], LBPs[1], LBPs[2])
 
 def Fotos():
 
