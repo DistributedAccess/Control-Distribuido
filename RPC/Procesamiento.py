@@ -9,9 +9,12 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.pylab import hist, show
 
+from Configuracion_LBP import *
 import math
 
 class Procesamiento():
+
+    Config = Configuracion_LBP()    #OBJETO DE CONFIGURACION
 
     def LBP(self, Imagen):
         """ Este metodo obtiene el Local Binary Pattern (LBP) de la Imagen
@@ -35,19 +38,21 @@ class Procesamiento():
 
         return his
 
-    def Distancia_Euclidiana(Imagen_Desconocida):
+    def Distancia_Euclidiana(self, Imagen_Desconocida):
         """ Este metodo calcula la distancia euclidianana del LBP de la imagen
             desconocida con respecto a los LBP de cada usuario de la Base de
             Datos
         """
+        NoUsuarios = self.Config.Numero_Usuarios()         OBTIENE EL NUMERO DE USUARIOS
+        DE = [None, None, None]#Distancia Euclidiana
+        contador = 1
 
-        #NoUsuarios = Numero_Usuarios()         OBTIENE EL NUMERO DE USUARIOS
         while (flag == 0):
 
-            #Query = Consultar_Users(contador)
+            Query = self.Config.Consultar_Usuarios(contador)
 
-            for i in range (2):
-                for j in range (15):
+            for i in range (3):
+                for j in range (16):
 
                     x = Imagen_Desconocida[j] - Query[i][j]
                     x = math.pow(x,2)
@@ -55,12 +60,15 @@ class Procesamiento():
                     DE[i] = x + DE[i]
 
                 DE[i] = math.sqrt(DE[i])
+
             if(DE[0] == DE[1] == DE[2]):
                 flag = 1
                 contador = 0
+                print("YA LA ENCONTRO")
             else:
                 flag = 1
                 contador = contador + 1
-
+                print("Sigue buscando")
             if(contador >= NoUsuarios):
                 flag = 1
+                print("No la encontro")
