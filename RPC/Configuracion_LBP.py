@@ -48,7 +48,7 @@ class Configuracion_LBP():
         self.cursor.close()
         return rows
 
-    def Consultar_Usuarios(self, Numero):
+    def Consultar_Usuarios(self, Fila, lbp):
         """ Este metodo regresa los LBP de cada usuarios segun el numero
             de la fila"""
 
@@ -57,9 +57,17 @@ class Configuracion_LBP():
                                     db = 'CONTROL_DISTRIBUIDO')
         self.cursor = self.db.cursor()
 
-        QUERY = """SELECT LBP_1, LBP_2, LBP_3 FROM USUARIOS WHERE
-                        ID LIMIT %s,1"""
-        Host_me = Numero-1
+        if(lbp == 1):
+            QUERY = """SELECT LBP_1 FROM USUARIOS WHERE
+                            ID LIMIT %s,1"""
+        elif(lbp == 2):
+            QUERY = """SELECT LBP_2 FROM USUARIOS WHERE
+                            ID LIMIT %s,1"""
+        else:
+            QUERY = """SELECT LBP_3 FROM USUARIOS WHERE
+                            ID LIMIT %s,1"""
+
+        Host_me = Fila-1
 
         self.cursor.execute(QUERY,[Host_me])
         rows = self.cursor.fetchall()
