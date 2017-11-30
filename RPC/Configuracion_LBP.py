@@ -46,6 +46,10 @@ class Configuracion_LBP():
 
         rows = self.cursor.fetchall()
         self.cursor.close()
+
+    	rows = str(rows[0])
+	rows = rows.translate(None,"(L,)")
+	rows = float(rows)
         return rows
 
     def Consultar_Usuarios(self, Fila):
@@ -81,7 +85,8 @@ class Configuracion_LBP():
             Matrix[lbp] = Matrix[lbp].translate(None,"n\(),''[]")#ELIMINAMOS LOS CARACTERES
             Matrix[lbp] = Matrix[lbp].split("  ")#CADA DOS ESPACIOS E
             Matrix[lbp][0]=Matrix[lbp][0].strip(" ")#ELIMINAMOS EL ESPACIO VACIO DEL PRIMER VALOR DEL ARREGLO
-
+		
         self.cursor.close()
-
+	
+	Matrix = [map(float,i) for i in Matrix]
         return Matrix

@@ -34,6 +34,7 @@ def Fotos():
 def Capture():
 
     camera = PiCamera()
+    camera.rotation = 180
     camera.start_preview()
 
     sleep(2)
@@ -43,8 +44,8 @@ def Capture():
 
 def Reconocimiento():
 
-    Proceso = Procesamiento()
+    Procesos = Procesamiento()
 
-    Imagen_Desco = Proceso.LBP('Captura.jpg')
+    Imagen_Desco = Procesos.LBP('Captura.jpg')
 
-    Proceso.Distancia_Euclidiana(Imagen_Desco)
+    Procesos.Distancia_Euclidiana(Imagen_Desco)

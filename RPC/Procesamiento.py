@@ -43,11 +43,12 @@ class Procesamiento():
             desconocida con respecto a los LBP de cada usuario de la Base de
             Datos
         """
-        NoUsuarios = self.Config.Numero_Usuarios()         OBTIENE EL NUMERO DE USUARIOS
-        DE = [None, None, None]#Distancia Euclidiana
+        NoUsuarios = float(self.Config.Numero_Usuarios())        # OBTIENE EL NUMERO DE USUARIOS
+        DE = [0.0, 0.0, 0.0]#Distancia Euclidiana
         contador = 1
-
-        while (flag == 0):
+	flag = 0
+	print NoUsuarios
+        while (contador <= NoUsuarios):
 
             Query = self.Config.Consultar_Usuarios(contador)
 
@@ -63,12 +64,15 @@ class Procesamiento():
 
             if(DE[0] == DE[1] == DE[2]):
                 flag = 1
-                contador = 0
+                contador = NoUsuarios + 1#PA QUE SE SALGA PUES
                 print("YA LA ENCONTRO")
             else:
-                flag = 1
+                flag = 0
                 contador = contador + 1
                 print("Sigue buscando")
+		print DE[0]
+		print DE[1]
+		print DE[2]
             if(contador >= NoUsuarios):
-                flag = 1
+                contador = contador + 1
                 print("No la encontro")
