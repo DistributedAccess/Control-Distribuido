@@ -50,7 +50,7 @@ class Configuracion_LBP():
 
     def Consultar_Usuarios(self, Fila, lbp):
         """ Este metodo regresa los LBP de cada usuarios segun el numero
-            de la fila"""
+            de la fila y el lbp a consultar"""
 
         self.db = MySQLdb.connect(user = self.__User, passwd = self.__Password,
                                     host = '127.0.0.1',
@@ -72,4 +72,13 @@ class Configuracion_LBP():
         self.cursor.execute(QUERY,[Host_me])
         rows = self.cursor.fetchall()
         self.cursor.close()
+
+        #   LOS LBP SE GUARDAN COMO TEXTO, POR LO TANTO DEBEMOS CONVERTIRLO
+        #   A UN ARRAY PARA PODER UTILIZARLOS
+
+        rows = str(rows)#CONVERTIMOS A STRING
+        rows = translate(None,"n\(),''[]")#ELIMINAMOS LOS CARACTERES
+        rows = rows.split("  ")#CADA VALOR ENTRE CADA DOS ESPACIOS SE CONVIERTE EN UN CALOR DEL ARREGLO
+        rows[0]=rows[0].strip(" ")#ELIMINAMOS EL ESPACIO VACIO DEL PRIMER VALOR DEL ARREGLO
+
         return rows
