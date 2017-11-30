@@ -48,7 +48,7 @@ class Configuracion_LBP():
         self.cursor.close()
         return rows
 
-    def Consultar_Usuarios(self, Fila, lbp):
+    def Consultar_Usuarios(self, Fila):
         """ Este metodo regresa los LBP de cada usuarios segun el numero
             de la fila y el lbp a consultar"""
 
@@ -57,28 +57,31 @@ class Configuracion_LBP():
                                     db = 'CONTROL_DISTRIBUIDO')
         self.cursor = self.db.cursor()
 
-        if(lbp == 1):
-            QUERY = """SELECT LBP_1 FROM USUARIOS WHERE
+        Matrix = [None, None, None]
+
+        for lbp in range(3):
+            if(lbp == 1):
+                QUERY = """SELECT LBP_1 FROM USUARIOS WHERE
+                                ID LIMIT %s,1"""
+            elif(lbp == 2):
+                QUERY = """SELECT LBP_2 FROM USUARIOS WHERE
                             ID LIMIT %s,1"""
-        elif(lbp == 2):
-            QUERY = """SELECT LBP_2 FROM USUARIOS WHERE
-                            ID LIMIT %s,1"""
-        else:
-            QUERY = """SELECT LBP_3 FROM USUARIOS WHERE
+            else:
+                QUERY = """SELECT LBP_3 FROM USUARIOS WHERE
                             ID LIMIT %s,1"""
 
-        Host_me = Fila-1
+            Host_me = Fila-1
+            self.cursor.execute(QUERY,[Host_me])
+            Matrix[lbp] = self.cursor.fetchall()
 
-        self.cursor.execute(QUERY,[Host_me])
-        rows = self.cursor.fetchall()
+            #   LOS LBP SE GUARDAN COMO TEXTO, POR LO TANTO DEBEMOS CONVERTIRLO
+            #   A UN ARRAY PARA PODER UTILIZARLOS
+
+            Matrix[lbp] = str(Matrix[lbp])#CONVERTIMOS A STRING
+            Matrix[lbp] = translate(None,"n\(),''[]")#ELIMINAMOS LOS CARACTERES
+            Matrix[lbp] = Matrix[lbp].split("  ")#CADA DOS ESPACIOS E
+            Matrix[lbp][0]=Matrix[lbp][0].strip(" ")#ELIMINAMOS EL ESPACIO VACIO DEL PRIMER VALOR DEL ARREGLO
+
         self.cursor.close()
 
-        #   LOS LBP SE GUARDAN COMO TEXTO, POR LO TANTO DEBEMOS CONVERTIRLO
-        #   A UN ARRAY PARA PODER UTILIZARLOS
-
-        rows = str(rows)#CONVERTIMOS A STRING
-        rows = translate(None,"n\(),''[]")#ELIMINAMOS LOS CARACTERES
-        rows = rows.split("  ")#CADA VALOR ENTRE CADA DOS ESPACIOS SE CONVIERTE EN UN CALOR DEL ARREGLO
-        rows[0]=rows[0].strip(" ")#ELIMINAMOS EL ESPACIO VACIO DEL PRIMER VALOR DEL ARREGLO
-
-        return rows
+        return Matrix
