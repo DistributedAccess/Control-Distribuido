@@ -3,8 +3,8 @@ from picamera import PiCamera
 from Procesamiento import *
 from time import *
 
-import numpy as np
-import cv2
+#import numpy as np
+#import cv2
 
 def Ingresar_al_Sistema(Boleta):
     #   FUNCION QUE AGREGA AL USUARIO AL SISTEMA POR
@@ -25,7 +25,7 @@ def Fotos():
     #   CAPTURA LAS FOTOGRAFIAS DEL USUARIO A INGRESAR
     #   AL SISTEMA
     camera = PiCamera()
-    camera.rotation = 180
+    # camera.rotation = 180
     camera.start_preview()
 
     for i in range(3):
@@ -37,10 +37,10 @@ def Fotos():
 def Capture():
 
     camera = PiCamera()
-    camera.rotation = 180
+    # camera.rotation = 180
     camera.start_preview()
 
-    sleep(2)
+    sleep(5)
     camera.capture('Captura.jpg')
 
     camera.stop_preview()
