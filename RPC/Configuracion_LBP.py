@@ -1,4 +1,5 @@
 import MySQLdb
+import numpy
 
 class Configuracion_LBP():
 
@@ -82,11 +83,11 @@ class Configuracion_LBP():
             #   A UN ARRAY PARA PODER UTILIZARLOS
 
             Matrix[lbp] = str(Matrix[lbp])#CONVERTIMOS A STRING
-            Matrix[lbp] = Matrix[lbp].translate(None,"n\(),''[]")#ELIMINAMOS LOS CARACTERES
+            Matrix[lbp] = Matrix[lbp].translate(None,"n\(),'[]")#ELIMINAMOS LOS CARACTERES
             Matrix[lbp] = Matrix[lbp].split("  ")#CADA DOS ESPACIOS E
-            Matrix[lbp][0]=Matrix[lbp][0].strip(" ")#ELIMINAMOS EL ESPACIO VACIO DEL PRIMER VALOR DEL ARREGLO
-		
-        self.cursor.close()
+            Matrix[lbp][0]=Matrix[lbp][0].strip(" ")#ELIMINAMOS EL ESPACIO VACIO DEL PRIMER VALOR DEL ARRAY
+       
+	self.cursor.close()
 	
-	Matrix = [map(float,i) for i in Matrix]
+	Matrix = [map(float,i) for i in Matrix]#PASO DE LA MUERTE
         return Matrix

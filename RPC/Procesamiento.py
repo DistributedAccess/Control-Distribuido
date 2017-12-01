@@ -43,7 +43,7 @@ class Procesamiento():
             desconocida con respecto a los LBP de cada usuario de la Base de
             Datos
         """
-        NoUsuarios = float(self.Config.Numero_Usuarios())        # OBTIENE EL NUMERO DE USUARIOS
+        NoUsuarios = self.Config.Numero_Usuarios()        # OBTIENE EL NUMERO DE USUARIOS
         DE = [0.0, 0.0, 0.0]#Distancia Euclidiana
         contador = 1
 	flag = 0

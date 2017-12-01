@@ -23,6 +23,7 @@ def Fotos():
     #   CAPTURA LAS FOTOGRAFIAS DEL USUARIO A INGRESAR
     #   AL SISTEMA
     camera = PiCamera()
+    camera.rotation = 180
     camera.start_preview()
 
     for i in range(3):
