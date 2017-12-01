@@ -48,12 +48,12 @@ if __name__ == '__main__':
     args, video_src = getopt.getopt(sys.argv[1:], '', ['cascade=', 'nested-cascade='])
 
     args = dict(args)
-    cascade_fn = args.get('--cascade', "haarcascade_frontalface_alt.xml")
+    cascade_fn = args.get('--cascade', "haarcascade_frontalcatface_extended.xml")
 
     cascade = cv2.CascadeClassifier(cascade_fn)
 
 	
-    img = cv2.imread('Lenna.png',cv2.IMREAD_COLOR)	
+    img = cv2.imread('Gat.jpg',cv2.IMREAD_COLOR)	
 
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     gray = cv2.equalizeHist(gray)
