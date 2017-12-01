@@ -3,6 +3,8 @@ from picamera import PiCamera
 from Procesamiento import *
 from time import *
 
+import numpy as np
+import cv2
 
 def Ingresar_al_Sistema(Boleta):
     #   FUNCION QUE AGREGA AL USUARIO AL SISTEMA POR
@@ -50,3 +52,7 @@ def Reconocimiento():
     Imagen_Desco = Procesos.LBP('Captura.jpg')
 
     Procesos.Distancia_Euclidiana(Imagen_Desco)
+
+def Deteccion():
+
+    face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
