@@ -73,6 +73,7 @@ class Procesamiento():
                 flag = 1
                 contador = NoUsuarios + 1#PA QUE SE SALGA PUES
                 print("YA LA ENCONTRO")
+		print(contador)
             else:
                 flag = 0
                 contador = contador + 1
@@ -80,12 +81,15 @@ class Procesamiento():
 		print DE[0]
 		print DE[1]
 		print DE[2]
-            if(contador >= NoUsuarios):
+            if(contador > NoUsuarios):
                 contador = contador + 1
                 print("No la encontro")
 
-    def Detec(self, Imagen):
-    
+    def Deteccion(self, Imagen):
+    	""" Este metodo detecta el rostro de la imagen de entrada y lo recorta
+	    guardando asi la imagen de entrada con el rostro a una resolucion de
+  	    512x512 pixeles
+        """
 	def detect(img, cascade):
             rects = cascade.detectMultiScale(img, scaleFactor=1.3, minNeighbors=4, minSize=(30, 30),
                                      flags=cv2.CASCADE_SCALE_IMAGE)
@@ -115,4 +119,5 @@ class Procesamiento():
 
 
     	newi = cv2.resize(crop_img,(512,512))    #REAJUSTAMOS LA IMAGEN
-    	cv2.imwrite('Recorte.jpg',newi)
+    	#cv2.imwrite('Recorte.jpg',newi)
+        return newi
