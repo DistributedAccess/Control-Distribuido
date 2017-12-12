@@ -65,10 +65,10 @@ class Configuracion_LBP():
         Matrix = [None, None, None]
 
         for lbp in range(3):
-            if(lbp == 1):
+            if(lbp == 0):
                 QUERY = """SELECT LBP_1 FROM USUARIOS WHERE
                                 ID LIMIT %s,1"""
-            elif(lbp == 2):
+            elif(lbp == 1):
                 QUERY = """SELECT LBP_2 FROM USUARIOS WHERE
                             ID LIMIT %s,1"""
             else:

@@ -26,7 +26,7 @@ def Foto_3():
     #   AL SISTEMA
     Proceso = Procesamiento()
     camera = PiCamera()
-    # camera.rotation = 180
+    camera.rotation = 180
     camera.start_preview()
 
     for i in range(3):
@@ -43,7 +43,7 @@ def Foto_1():
 
     camera = PiCamera()
     Proceso = Procesamiento()
-    # camera.rotation = 180
+    camera.rotation = 180
     camera.start_preview()
 
     sleep(5)

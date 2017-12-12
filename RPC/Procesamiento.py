@@ -52,22 +52,27 @@ class Procesamiento():
         """
         NoUsuarios = self.Config.Numero_Usuarios()        # OBTIENE EL NUMERO DE USUARIOS
         DE = [0.0, 0.0, 0.0]#Distancia Euclidiana
-        contador = 1
+	contador = 1
 	flag = 0
+	y = 0	
+
 	print NoUsuarios
         while (contador <= NoUsuarios):
 
             Query = self.Config.Consultar_Usuarios(contador)
+	
+	    #DE = [0.0, 0.0, 0.0]            
 
-            for i in range (3):
+	    for i in range (3):
+
                 for j in range (16):
 
-                    x = Imagen_Desconocida[j] - Query[i][j]
-                    x = math.pow(x,2)
+                    x = round(Imagen_Desconocida[j],3) - round(Query[i][j],3)# Redondeamos a la Imagen de Desconocida 
+		    x = math.pow(x,2)
+                    y = x + y
 
-                    DE[i] = x + DE[i]
-
-                DE[i] = math.sqrt(DE[i])
+                DE[i] = math.sqrt(y)
+		
 
             if(DE[0] == DE[1] == DE[2]):
                 flag = 1
@@ -81,6 +86,7 @@ class Procesamiento():
 		print DE[0]
 		print DE[1]
 		print DE[2]
+		
             if(contador > NoUsuarios):
                 contador = contador + 1
                 print("No la encontro")
