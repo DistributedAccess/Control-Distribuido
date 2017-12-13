@@ -66,13 +66,15 @@ class Procesamiento():
 	    for i in range (3):
 
                 for j in range (16):
-
+		    #print round(Imagen_Desconocida[j],3)
+		    #print round(Query[i][j],3)
                     x = round(Imagen_Desconocida[j],3) - round(Query[i][j],3)# Redondeamos a la Imagen de Desconocida 
 		    x = math.pow(x,2)
                     y = x + y
 
                 DE[i] = math.sqrt(y)
-		
+		#print y
+		y = 0		
 
             if(DE[0] == DE[1] == DE[2]):
                 flag = 1
@@ -80,7 +82,6 @@ class Procesamiento():
                 print("YA LA ENCONTRO")
 		print(contador)
             else:
-                flag = 0
                 contador = contador + 1
                 print("Sigue buscando")
 		print DE[0]
