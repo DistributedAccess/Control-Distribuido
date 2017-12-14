@@ -11,7 +11,7 @@ class Configuracion_LBP():
     db          =   None          #   Objeto para la Base de Datos
     cursor      =   None          #   Objeto para la Base de Datos
 
-    def Asignar_LBP(self, Id_Usuario, Data1, Data2, Data3):
+    def Asignar_LBP(self, Id_Usuario, Data1, Data2, Data3, Data4, Data5, Data6, Data7, Data8, Data9, Data10):
         """ Este metdo ingresa el LBP_1, LBP_2 y LBP_3 de los usuarios
             por medio del ID de la tabla USUARIO.
         """
@@ -23,9 +23,11 @@ class Configuracion_LBP():
         self.cursor = self.db.cursor()
 
         #   DECLARACION DEL QUERY
-        UPDATE = """UPDATE USUARIOS SET LBP_1=%s, LBP_2=%s, LBP_3=%s
+        UPDATE = """UPDATE USUARIOS SET LBP_1=%s, LBP_2=%s, LBP_3=%s,
+			    LBP_4=%s, LBP_5=%s, LBP_6=%s, LBP_7=%s,
+			    LBP_8=%s, LBP_9=%s, LBP_10=%s
                             WHERE ID=%s"""
-        Host_me = (Data1, Data2, Data3, Id_Usuario)
+        Host_me = (Data1, Data2, Data3, Data4, Data5, Data6, Data7, Data8, Data9, Data10, Id_Usuario)
 
         self.cursor.executemany(UPDATE,[Host_me])
 
@@ -62,19 +64,39 @@ class Configuracion_LBP():
                                     db = 'CONTROL_DISTRIBUIDO')
         self.cursor = self.db.cursor()
 
-        Matrix = [None, None, None]
+        Matrix = [None, None, None, None, None, None, None, None, None, None]
 
-        for lbp in range(3):
+        for lbp in range(10):
             if(lbp == 0):
                 QUERY = """SELECT LBP_1 FROM USUARIOS WHERE
                                 ID LIMIT %s,1"""
             elif(lbp == 1):
                 QUERY = """SELECT LBP_2 FROM USUARIOS WHERE
                             ID LIMIT %s,1"""
-            else:
+            elif(lbp == 2):
                 QUERY = """SELECT LBP_3 FROM USUARIOS WHERE
                             ID LIMIT %s,1"""
-
+	    elif(lbp == 3):
+                QUERY = """SELECT LBP_4 FROM USUARIOS WHERE
+                            ID LIMIT %s,1"""
+	    elif(lbp == 4):
+                QUERY = """SELECT LBP_5 FROM USUARIOS WHERE
+                            ID LIMIT %s,1"""
+	    elif(lbp == 5):
+                QUERY = """SELECT LBP_6 FROM USUARIOS WHERE
+                            ID LIMIT %s,1"""
+	    elif(lbp == 6):
+                QUERY = """SELECT LBP_7 FROM USUARIOS WHERE
+                            ID LIMIT %s,1"""
+	    elif(lbp == 7):
+                QUERY = """SELECT LBP_8 FROM USUARIOS WHERE
+                            ID LIMIT %s,1"""
+	    elif(lbp == 8):
+                QUERY = """SELECT LBP_9 FROM USUARIOS WHERE
+                            ID LIMIT %s,1"""
+	    elif(lbp == 9):
+                QUERY = """SELECT LBP_10 FROM USUARIOS WHERE
+                            ID LIMIT %s,1"""
             Host_me = Fila-1
             self.cursor.execute(QUERY,[Host_me])
             Matrix[lbp] = self.cursor.fetchall()

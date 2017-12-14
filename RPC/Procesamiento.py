@@ -51,7 +51,7 @@ class Procesamiento():
             Datos
         """
         NoUsuarios = self.Config.Numero_Usuarios()        # OBTIENE EL NUMERO DE USUARIOS
-        DE = [0.0, 0.0, 0.0]#Distancia Euclidiana
+        DE = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]#Distancia Euclidiana
 	contador = 1
 	Usuario = 0
 	y = 0	
@@ -62,10 +62,8 @@ class Procesamiento():
         while (contador <= NoUsuarios):
 
             Query = self.Config.Consultar_Usuarios(contador)
-	
-	    #DE = [0.0, 0.0, 0.0]            
 
-	    for i in range (3):
+	    for i in range (10):
 
                 for j in range (16):
                     x = round(Imagen_Desconocida[j],5) - round(Query[i][j],5)# Redondeamos a la Imagen de Desconocida 
@@ -78,7 +76,7 @@ class Procesamiento():
 	    #Obtiene el promedio de las distancias euclidanas con respecto a la
 	    #imagen desconocida y lo guarda en un arreglo variable
 	    Average = 0
-	    Average = (DE[0]+DE[1]+DE[2])/3
+	    Average = (DE[0]+DE[1]+DE[2])/10
 	    Prom.append(Average)	
             print Average
 	    contador = contador + 1

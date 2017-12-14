@@ -1,4 +1,4 @@
-6from Control_Distribuido import *
+from Control_Distribuido import *
 
 class Servidor_Distribuido(Control_Distribuido):
 

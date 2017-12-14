@@ -177,6 +177,13 @@ class Create_DB:
                     LBP_1 TEXT(100) NULL,
                     LBP_2 TEXT(100) NULL,
                     LBP_3 TEXT(100) NULL,
+		    LBP_4 TEXT(100) NULL,
+		    LBP_5 TEXT(100) NULL,
+		    LBP_6 TEXT(100) NULL,
+		    LBP_7 TEXT(100) NULL,
+		    LBP_8 TEXT(100) NULL,
+		    LBP_9 TEXT(100) NULL,
+		    LBP_10 TEXT(100) NULL,
                     PRIMARY KEY (ID)
                     )ENGINE=InnoDB;""")
 
@@ -281,9 +288,16 @@ class Create_DB:
                     Nombre varchar(50) NOT NULL,
                     Password varchar(10) NOT NULL,
                     Jerarquia varchar(10) NOT NULL,
-                    LBP_1 TEXT(100) NOT NULL,
-                    LBP_2 TEXT(100) NOT NULL,
-                    LBP_3 TEXT(100) NOT NULL
+                    LBP_1 TEXT(100) NULL,
+                    LBP_2 TEXT(100) NULL,
+                    LBP_3 TEXT(100) NULL,
+		    LBP_4 TEXT(100) NULL,
+                    LBP_5 TEXT(100) NULL,
+                    LBP_6 TEXT(100) NULL,
+                    LBP_7 TEXT(100) NULL,
+                    LBP_8 TEXT(100) NULL,
+                    LBP_9 TEXT(100) NULL,
+                    LBP_10 TEXT(100) NULL
                     )ENGINE=InnoDB;""")
 
         self.cursor.execute(QUERY)
