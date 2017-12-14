@@ -21,6 +21,37 @@ def Ingresar_al_Sistema(Boleta):
 
     Configu.Asignar_LBP(Boleta, LBPs[0], LBPs[1], LBPs[2])
 
+def A_Mano(Boleta,Uno,Dos,Tres):
+    #	ESTA FUNCION SEGMENTA EL ROSTRO DE LAS PERSONAS,
+    #	EXTRAE LOS LBP DE LAS IMAGENES Y LOS INGRESA A 
+    #	LA BASE DE DATOS.
+    LBPs = [None, None, None]
+    Proceso = Procesamiento()
+    Configu = Configuracion_LBP()
+
+    i=Proceso.Deteccion(Uno)
+    cv2.imwrite('Imagen1.jpg',i)
+    LBPs[0] = Proceso.LBP('Imagen1.jpg')
+
+    i=Proceso.Deteccion(Dos)
+    cv2.imwrite('Imagen2.jpg',i)
+    LBPs[1] = Proceso.LBP('Imagen2.jpg')
+
+    i=Proceso.Deteccion(Tres)
+    cv2.imwrite('Imagen3.jpg',i)
+    LBPs[2] = Proceso.LBP('Imagen3.jpg')
+
+    Configu.Asignar_LBP(Boleta, LBPs[0], LBPs[1], LBPs[2])
+
+def Rostro_Mano(In):
+    #	ESTA FUNCION SOBRESCRIBE UNA IMAGEN DEJANDO ASI
+    #	EL ROSTRO.
+    Proceso = Procesamiento()
+    i=Proceso.Deteccion(In)
+    cv2.imwrite('%s' %In,i)
+
+
+
 def Foto_3():
     #   CAPTURA LAS FOTOGRAFIAS DEL USUARIO A INGRESAR
     #   AL SISTEMA

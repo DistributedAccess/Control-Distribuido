@@ -53,8 +53,10 @@ class Procesamiento():
         NoUsuarios = self.Config.Numero_Usuarios()        # OBTIENE EL NUMERO DE USUARIOS
         DE = [0.0, 0.0, 0.0]#Distancia Euclidiana
 	contador = 1
-	flag = 0
+	Usuario = 0
 	y = 0	
+
+	Prom = []
 
 	print NoUsuarios
         while (contador <= NoUsuarios):
@@ -66,31 +68,29 @@ class Procesamiento():
 	    for i in range (3):
 
                 for j in range (16):
-		    #print round(Imagen_Desconocida[j],3)
-		    #print round(Query[i][j],3)
-                    x = round(Imagen_Desconocida[j],3) - round(Query[i][j],3)# Redondeamos a la Imagen de Desconocida 
+                    x = round(Imagen_Desconocida[j],5) - round(Query[i][j],5)# Redondeamos a la Imagen de Desconocida 
 		    x = math.pow(x,2)
                     y = x + y
 
                 DE[i] = math.sqrt(y)
-		#print y
 		y = 0		
-
-            if(DE[0] == DE[1] == DE[2]):
-                flag = 1
-                contador = NoUsuarios + 1#PA QUE SE SALGA PUES
-                print("YA LA ENCONTRO")
-		print(contador)
-            else:
-                contador = contador + 1
-                print("Sigue buscando")
-		print DE[0]
-		print DE[1]
-		print DE[2]
 		
-            if(contador > NoUsuarios):
-                contador = contador + 1
-                print("No la encontro")
+	    #Obtiene el promedio de las distancias euclidanas con respecto a la
+	    #imagen desconocida y lo guarda en un arreglo variable
+	    Average = 0
+	    Average = (DE[0]+DE[1]+DE[2])/3
+	    Prom.append(Average)	
+            print Average
+	    contador = contador + 1
+	
+	anterior = 100
+	for i in range(int(NoUsuarios)):
+	    
+	    if(Prom[i] < anterior):
+		anterior = Prom[i]
+		Usuario = i+1
+	print "El Usuario: " ,Usuario
+	Prom = 0
 
     def Deteccion(self, Imagen):
     	""" Este metodo detecta el rostro de la imagen de entrada y lo recorta
