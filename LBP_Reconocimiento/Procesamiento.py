@@ -4,6 +4,8 @@ import numpy as np
 import cv2
 import os
 
+subjects = ["Alguien","Josue"]
+
 def Deteccion_Rostro(Imagen):
     #   Este metodo Detecta el rostro de las fotografias y regresa el
     #   rostro de la persona para ser guardado posteriormente.
@@ -70,3 +72,44 @@ def Preparar_Entrenamiento(Directorios):
                 labels.append(label)
 
     return faces, labels
+
+faces, labels = Preparar_Entrenamiento("Entrenamiento")
+face_recognizer = cv2.face.createLBPHFaceRecognizer()
+face_recognizer.train(faces, np.array(labels))
+
+
+
+
+def Prediccion(Imagen):
+	
+    #    AQUI SE HACE LA MAGIA, PARA ELLO YA DEBIO DE HABERSE
+    #    ENTRENADO AL SISTEMA :3
+	
+    #    Creamos una copia de la imagen de Entrada
+	
+    Img = Imagen.copy()
+    #    Se detecta el rostro desde la copia
+	
+    face, rect = Deteccion_Rostro(Img)
+
+    #    Hacemos una prediccion del rostro usando
+    #    el objeto global face_recognizer >:)
+#    label, confidence = face_recognizer.predict(face)
+    label= face_recognizer.predict(face)
+    #    subjects es el vector que contiene el nombre de los 
+    #    usuarios variable global tambien
+    text = subjects[label]
+    print text
+
+
+
+
+
+
+
+
+
+
+
+
+
