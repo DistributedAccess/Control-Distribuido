@@ -1,0 +1,49 @@
+from picamera import PiCamera
+from time import sleep
+import numpy as np
+import MySQLdb
+import cv2
+import os
+
+def Numero_Usuarios(self):
+    """ Este metodo regresa el numero de usuarios """
+
+    #   DECLARACION DE LOS OBJETOS DE LA BASE DE DATOS
+    self.db = MySQLdb.connect(user = self.__User, passwd = self.__Password,
+              
+
+                      host = '127.0.0.1',
+                                    db = 'CONTROL_DISTRIBUIDO')
+        self.cursor = self.db.cursor()
+
+        QUERY = """SELECT count(ID) FROM USUARIOS"""
+
+        self.cursor.execute(QUERY)
+
+        rows = self.cursor.fetchall()
+        self.cursor.close()
+
+        rows = str(rows[0])
+        rows = rows.translate(None,"(L,)")
+        rows = float(rows)
+        return rows
+
+def Ingresar_al_Sistema(Id):
+    
+    camera = PiCamera()
+    camera.rotation = 180
+    camera.start_preview()
+    #sleep(10)
+    os.system("omxplayer Audios/Uno.mp3")
+    Dir = 1
+     
+    os.mkdir("Entrenamiento/U%s" % Dir)
+
+    for i in range(12):
+        os.system("omxplayer Audios/%s.mp3" %(i+1))
+	sleep(1.5)
+	camera.capture('Entrenamiento/U%s/Imagen%s.jpg' % (Dir, i+1))
+    
+    os.system("omxplayer Audios/fin.mp3")
+
+    camera.stop_preview()

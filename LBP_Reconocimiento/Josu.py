@@ -45,7 +45,7 @@ def Preparar_Entrenamiento(Directorios):
     #   PRIMER_PASO!!!
     #   Obtener los Directorios (Un directorio por persona)
     dirs = os.listdir(Directorios)
-
+    print dirs
     #   Lista que contiene todos los rostros
     faces = []
     #   Lista que contiene las etiquetas para todos los usuarios
@@ -64,7 +64,7 @@ def Preparar_Entrenamiento(Directorios):
         #    del dir_name
 
         label = int(dir_name.replace("U", ""))
-
+        
         subject_dir_path = Directorios + "/" + dir_name
 
         subject_images_names = os.listdir(subject_dir_path)
@@ -118,7 +118,7 @@ def Prediccion(Imagen):
 
     #    Hacemos una prediccion del rostro usando
     #    el objeto global face_recognizer >:)
-#    label, confidence = face_recognizer.predict(face)
+    #label, confidence = face_recognizer.predict(face)
     label= face_recognizer.predict(face)
     #    subjects es el vector que contiene el nombre de los 
     #    usuarios variable global tambien

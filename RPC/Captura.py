@@ -85,16 +85,16 @@ def Foto_3():
     #   AL SISTEMA
     Proceso = Procesamiento()
     camera = PiCamera()
-    camera.rotation = 180
+    #camera.rotation = 180
     camera.start_preview()
 
     for i in range(3):
         sleep(2)
         camera.capture('Imagen%s.jpg' % (i+1))
 
-    for j in range(10):
-	IMG = Proceso.Deteccion('Imagen%s.jpg' % (j+1))
-        cv2.imwrite(('Imagen%s.jpg' % (j+1)),IMG)
+   # for j in range(10):
+	#IMG = Proceso.Deteccion('Imagen%s.jpg' % (j+1))
+        #cv2.imwrite(('Imagen%s.jpg' % (j+1)),IMG)
 
     camera.stop_preview()
 
