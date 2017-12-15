@@ -9,8 +9,8 @@ def Deteccion_Rostro(Imagen):
     #   rostro de la persona para ser guardado posteriormente.
 
     gray = cv2.cvtColor(Imagen, cv2.COLOR_BGR2GRAY)
-    face_cascade = cv2.CascadeClassifier('lbpcascade_frontalface.xml$
-    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.2, min$
+    face_cascade = cv2.CascadeClassifier('lbpcascade_frontalface.xml')
+    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=5);
 
 
     (x, y, w, h) = faces[0]
