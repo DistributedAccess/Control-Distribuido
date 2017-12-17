@@ -54,7 +54,7 @@ def Usuario_No(Numero):
 def Ingresar_al_Sistema(Dir):
     
     camera = PiCamera()
-    #camera.rotation = 180
+    camera.rotation = 180
     camera.start_preview()
     #sleep(10)
     os.system("omxplayer Audios/Uno.mp3")

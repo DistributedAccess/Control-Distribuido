@@ -5,6 +5,9 @@ import numpy as np
 import cv2
 import os
 
+face_recognizer = cv2.face.createLBPHFaceRecognizer(threshold=50)
+#face_recognizer = cv2.createLBPHFaceRecognizer()
+
 def Usuario_No(Numero):
     """ Este metodo regresa el nombre del usuario"""
 
@@ -32,13 +35,13 @@ def Usuario_No(Numero):
 def Deteccion_Rostro(Imagen):
     #   Este metodo Detecta el rostro de las fotografias y regresa el
     #   rostro de la persona para ser guardado posteriormente.
-
     gray = cv2.cvtColor(Imagen, cv2.COLOR_BGR2GRAY)
     face_cascade = cv2.CascadeClassifier('lbpcascade_frontalface.xml')
     faces = face_cascade.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=5);
 
     (x, y, w, h) = faces[0]
-    return gray[y:y+w, x:x+h], faces[0]
+
+    return gray[y:y+h, x:x+w], faces[0]
 
 def Preparar_Entrenamiento(Directorios):
 
@@ -97,15 +100,13 @@ def Preparar_Entrenamiento(Directorios):
 
     return faces, labels
 
-faces, labels = Preparar_Entrenamiento("Entrenamiento")
-face_recognizer = cv2.face.createLBPHFaceRecognizer()
-face_recognizer.train(faces, np.array(labels))
+def Entrenamiento():
 
+    faces, labels = Preparar_Entrenamiento("Entrenamiento")
+    
+    face_recognizer.train(faces, np.array(labels))
 
-
-
-def Prediccion(Imagen):
-	
+def Prediccion(Imagen):	
     #    AQUI SE HACE LA MAGIA, PARA ELLO YA DEBIO DE HABERSE
     #    ENTRENADO AL SISTEMA :3
 	
@@ -114,13 +115,19 @@ def Prediccion(Imagen):
     Img = Imagen.copy()
     #    Se detecta el rostro desde la copia
 	
-    face, rect = Deteccion_Rostro(Img)
-
+    face, rect = Deteccion_Rostro(Imagen)
+   
     #    Hacemos una prediccion del rostro usando
     #    el objeto global face_recognizer >:)
-#    label, confidence = face_recognizer.predict(face)
-    label= face_recognizer.predict(face)
-    #    subjects es el vector que contiene el nombre de los 
+    label = face_recognizer.predict(face)
+  
+    #subjects es el vector que contiene el nombre de los 
     #    usuarios variable global tambien
+    print label
+
     text = Usuario_No(label)
-    print text
+    return text
+
+
+
+

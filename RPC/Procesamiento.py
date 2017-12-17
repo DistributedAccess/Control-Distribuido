@@ -92,7 +92,7 @@ class Procesamiento():
 
     def Deteccion(self, Imagen):
     	""" Este metodo detecta el rostro de la imagen de entrada y lo recorta
-	    guardando asi la imagen de entrada con el rostro a una resolucion de
+    guardando asi la imagen de entrada con el rostro a una resolucion de
   	    512x512 pixeles
         """
 	def detect(img, cascade):
