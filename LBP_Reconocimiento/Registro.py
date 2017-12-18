@@ -36,7 +36,7 @@ def Usuario_No(Numero):
     cursor = db.cursor()
 
     QUERY = """SELECT Nombre FROM USUARIOS WHERE 
-			ID = %s"""
+			ID = %s AND LBP_1 IS NULL"""
 
     cursor.execute(QUERY,[Numero])
 
@@ -51,12 +51,25 @@ def Usuario_No(Numero):
     return rows
 
 
+def Captura(Dir, i):
+    camera.PiCamera()
+    camera.capture('Entrenamiento/U%s/Imagen%s.jpg' % (Dir, i+1))
+    try:
+        Image = cv2.imread('Entrenamiento/U%s/Imagen%s.jpg' % (Dir, i+1))
+        camera.annotate_text = "Detectando rostro"
+        Deteccion_Rostro(Image)
+        return "Ok"
+
+    except IndexError:
+        Captura(Dir, i)
+
+
 def Ingresar_al_Sistema(Dir):
-    
+
     camera = PiCamera()
     camera.rotation = 180
     camera.start_preview()
-    #sleep(10)
+    
     os.system("omxplayer Audios/Uno.mp3")
      
     os.mkdir("Entrenamiento/U%s" % Dir)
@@ -64,8 +77,32 @@ def Ingresar_al_Sistema(Dir):
     for i in range(12):
         os.system("omxplayer Audios/%s.mp3" %(i+1))
 	sleep(1.5)
-	camera.capture('Entrenamiento/U%s/Imagen%s.jpg' % (Dir, i+1))
+
+	Captura(Dir, i)
+	#camera.capture('Entrenamiento/U%s/Imagen%s.jpg' % (Dir, i+1))
     
     os.system("omxplayer Audios/fin.mp3")
 
     camera.stop_preview()
+
+
+
+if __name__ == "__main__":
+
+    Usuarios = Numero_Usuarios()
+    Usuarios = int(Usuarios)
+
+
+    print "\n			Bienvenido!!!!"
+    print "\n	Los Usuarios que se demuestran a continuacion no se"
+    print "	encuentran sus fotografias en la Base de Datos. Favor"
+    print "        de escribir el numero del usuario para registrarlo."
+    
+    for i in range(Usuarios):
+	User = Usuario_No(i + 1)
+	if (User != ""):
+	    print i+1, User
+
+    usuario = raw_input("\n	Introduzca el Numero del Usuario: ")
+    
+    Ingresar_al_Sistema(usuario)
