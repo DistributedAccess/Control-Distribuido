@@ -6,6 +6,8 @@ import cv2
 import os
 import time
 
+camera = PiCamera()
+
 def Numero_Usuarios():
     """ Este metodo regresa el numero de usuarios """
 
@@ -53,7 +55,7 @@ def Usuario_No(Numero):
 
 
 def Captura(Dir, i):
-    camera.PiCamera()
+    
     camera.capture('Entrenamiento/U%s/Imagen%s.jpg' % (Dir, i+1))
     try:
         Image = cv2.imread('Entrenamiento/U%s/Imagen%s.jpg' % (Dir, i+1))
@@ -67,8 +69,8 @@ def Captura(Dir, i):
 
 def Ingresar_al_Sistema(Dir):
 
-    camera = PiCamera()
-    camera.rotation = 180
+    #camera = PiCamera()
+    #camera.rotation = 180
     camera.start_preview()
     
     os.system("omxplayer Audios/Uno.mp3")

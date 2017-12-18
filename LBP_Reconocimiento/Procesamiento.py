@@ -4,6 +4,7 @@ import MySQLdb
 import numpy as np
 import cv2
 import os
+import time
 
 face_recognizer = cv2.face.createLBPHFaceRecognizer(threshold=50)
 #face_recognizer = cv2.createLBPHFaceRecognizer()
@@ -131,7 +132,7 @@ def Prediccion(Imagen):
     text = Usuario_No(label)
 
     fin = time.time()
-    tiempo fin - inicio
+    tiempo = fin - inicio
     print tiempo
 
     return text

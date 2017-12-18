@@ -1,0 +1,17 @@
+body{
+    width: 800px;
+}
+form{
+    width: 500px;
+    height: 350px;
+    margin-top: 20px;
+}
+
+#userimg{
+    width: 100px;
+}
+
+#img-brand{
+    float: left;
+    width: 125px;
+}

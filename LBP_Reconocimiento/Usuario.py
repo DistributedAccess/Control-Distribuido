@@ -35,7 +35,7 @@ if __name__ == "__main__":
     #	CONFIGURAMOS LA PICAMERA
     camera = PiCamera()
     camera.start_preview()
-    camera.rotation = 180
+    #camera.rotation = 180
     camera.annotate_text_size = 80
 
     #	CONFIGURAMOS LOS GPIO
