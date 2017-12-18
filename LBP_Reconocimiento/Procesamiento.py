@@ -101,15 +101,18 @@ def Preparar_Entrenamiento(Directorios):
     return faces, labels
 
 def Entrenamiento():
-
-    faces, labels = Preparar_Entrenamiento("Entrenamiento")
     
+    inicio = time.time()
+    faces, labels = Preparar_Entrenamiento("Entrenamiento")    
     face_recognizer.train(faces, np.array(labels))
+    fin = time.time()
+    tiempo = fin - inicio
+    print tiempo    
 
 def Prediccion(Imagen):	
     #    AQUI SE HACE LA MAGIA, PARA ELLO YA DEBIO DE HABERSE
     #    ENTRENADO AL SISTEMA :3
-	
+    inicio = time.time()
     #    Creamos una copia de la imagen de Entrada
 	
     Img = Imagen.copy()
@@ -126,8 +129,9 @@ def Prediccion(Imagen):
     print label
 
     text = Usuario_No(label)
+
+    fin = time.time()
+    tiempo fin - inicio
+    print tiempo
+
     return text
-
-
-
-

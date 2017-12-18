@@ -4,6 +4,7 @@ import numpy as np
 import MySQLdb
 import cv2
 import os
+import time
 
 def Numero_Usuarios():
     """ Este metodo regresa el numero de usuarios """
@@ -83,7 +84,7 @@ def Ingresar_al_Sistema(Dir):
     
     os.system("omxplayer Audios/fin.mp3")
 
-    camera.stop_preview()
+    #camera.stop_preview()
 
 
 
@@ -105,4 +106,8 @@ if __name__ == "__main__":
 
     usuario = raw_input("\n	Introduzca el Numero del Usuario: ")
     
-    Ingresar_al_Sistema(usuario)
+    inicio_usuario = time.time()	#    TIEMPO DE INGRESAR AL SISTEMA
+    Ingresar_al_Sistema(usuario)	#    
+    fin_usuario = time.time()		#
+    tiempo = fin_usuario-inicio_usuario	#
+    print tiempo			#
